@@ -1,0 +1,14 @@
+
+.navPane {
+    width: 200px;
+    float: left;
+    border: groove;
+}
+
+.body {
+    margin-left: 220px;
+}
+
+.mainContent {
+    width: 100%;
+}
