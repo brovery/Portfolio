@@ -1,3 +1,6 @@
+header {
+    height: 30px;
+}
 
 .navPane {
     width: 100%;
@@ -9,7 +12,7 @@
     position: fixed;
 }
 
-.navPane p {
+.myName {
     margin-left: 20%;
 }
 
@@ -21,8 +24,9 @@
     color: orchid;
 }
 
-.navPane span {
-   margin-left: 60%;
+nav {
+    float: right;
+    margin-right: 30px;
 }
 
 .body {
