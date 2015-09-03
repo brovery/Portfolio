@@ -1,8 +1,28 @@
 
 .navPane {
-    width: 200px;
+    width: 100%;
+    background: darkblue;
+    color: ghostwhite;
     float: left;
-    border: groove;
+    border: none;
+    top: 0;
+    position: fixed;
+}
+
+.navPane p {
+    margin-left: 20%;
+}
+
+.navPane a:link {
+    color: ghostwhite;
+}
+
+.navPane a:visited {
+    color: orchid;
+}
+
+.navPane span {
+   margin-left: 60%;
 }
 
 .body {
