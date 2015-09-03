@@ -36,3 +36,20 @@ nav {
 .mainContent {
     width: 100%;
 }
+
+article {
+    background-color: aquamarine;
+    border: 1px solid black;
+    border-radius: 150px;
+    float: left;
+    margin: 0 0 30px 30px;
+    overflow: hidden;
+    padding: 9px;
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+article.h1 {
+    text-align: center;
+}
