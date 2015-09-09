@@ -1,6 +1,33 @@
+.myTable {
+    position: relative;
+    width: 500px;
+    top: 100px;
+    box-shadow: 15px 30px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-spacing: 5px;
+    padding: 10px;
+}
+
+table {
+    width: 400px;
+}
+
+.myShadow {
+    position: relative;
+    top: 250px;
+    width: 100px;
+    background-color: green;
+    box-shadow: 10px 10px 5px aqua;
+}
+
+
+
 .navPane {
     width: 100%;
-    height: 30px;
+    height: 50px;
     background: darkblue;
     color: ghostwhite;
     float: left;
@@ -8,6 +35,8 @@
     top: 0;
     position: fixed;
     z-index: 5;
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
 }
 
 nav {
@@ -53,9 +82,18 @@ article.h1 {
 
 .details {
     width: 100%;
-    padding: 15px 0;
+    padding: 0;
     text-align: center;
-    position: absolute;
+    position: relative;
     top: 160px;
 
+}
+
+/* Media sizes */
+/* 960 pixel screens */
+
+@media only screen and (max-width: 750px) {
+   .myName {
+       display: none;
+   }
 }
