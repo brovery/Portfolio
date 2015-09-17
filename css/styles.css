@@ -8,6 +8,20 @@ body {
 }
 
 footer {
-    margin: 300px 0;
+    margin: 100px 0;
+}
+
+.myFace {
+    display: none;
+}
+
+.navbar-brand:hover .myFace {
+
+    display: block;
+
+}
+
+#smallFace {
+    max-height: 400px;
 }
 
