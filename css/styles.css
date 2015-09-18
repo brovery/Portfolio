@@ -3,8 +3,8 @@ body {
     padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
 }
 
-.img-center {
-    margin: 0 auto;
+.text-center {
+    margin-bottom: 80px; /*Separate rows of items.*/
 }
 
 footer {
@@ -18,10 +18,32 @@ footer {
 .navbar-brand:hover .myFace {
 
     display: block;
-
 }
 
 #smallFace {
     max-height: 400px;
 }
 
+.img-center {
+    margin: 0 auto;
+}
+
+.myWork {
+    position: relative;
+    top: -120px;
+    opacity: 0;
+}
+
+.text-center:hover .myWork {
+    display: block;
+    opacity: 1;
+}
+
+.text-center:hover .img-center {
+    opacity: .1;
+}
+
+.myFooter {
+    background-color: #222;
+    color: #269abc;
+}
