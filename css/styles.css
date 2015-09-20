@@ -1,6 +1,8 @@
 
 body {
     padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    background: url("../images/Pappern-14.jpg"), no-repeat;
+    background-size: 100%;
 }
 
 .text-center {
@@ -46,4 +48,46 @@ footer {
 .myFooter {
     background-color: #222;
     color: #269abc;
+}
+
+.tmnt {
+    max-height: 300px;
+}
+
+.bottom-border {
+    padding: 10px;
+    border-bottom: solid darkgray;
+
+}
+
+h5 {
+    font-family: 'Oswald', sans-serif;
+    font-size: large;
+}
+
+table, th, td {
+    border: 1px solid darkgray;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    font-family: 'Oswald', sans-serif;
+    font-size: x-large;
+}
+
+a.noLink {
+    color: black;
+}
+
+.page-header {
+    border-bottom: 1px solid #5e5e5e;
+}
+
+.myLinks {
+    height: 50px;
 }
