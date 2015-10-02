@@ -91,3 +91,12 @@ a.noLink {
 .myLinks {
     height: 50px;
 }
+
+hr {
+    border-top-color: black;
+}
+
+.tenure  {
+    position: relative;
+    top: 24px;
+}
