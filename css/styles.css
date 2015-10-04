@@ -100,3 +100,36 @@ hr {
     position: relative;
     top: 24px;
 }
+
+.address {
+    position: relative;
+    top: 24px;
+}
+
+#codeWarsImg {
+    height: 100%;
+    width: 100%;
+}
+
+.panel {
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.progress {
+    background-color: #999999;
+}
+
+.myBars {
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
+}
+
+footer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
