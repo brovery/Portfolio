@@ -1,8 +1,38 @@
 
+//Need an object that stores the information about the course:
+
+scoreboard {
+    course {
+        holes{
+            teeW yardage //Women - red
+            teeM yardage // Men - white
+            teeC yardage //champ. - blue
+            teeP yardage //Pro. - black
+            par
+            map coordinates
+        }
+    }
+    //This part of the object builds the player's scores.
+    player {
+        Handicap //stores a value that
+        hole score {//stores a score for each hole. {
+            score
+            putts
+        }
 
 
+    }
+}
 
 
+//Need a hole builder:
+    //Will replace the map with the current hole's map.
+    //Buttons should not change?
+
+//Scorecard builder:
+    //Opens modal? that shows a score selector with score & # of putts.
+    //Probably need a way to change holes if necessary.
+    //reset button?
 
 
 
