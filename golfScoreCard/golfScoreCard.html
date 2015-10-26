@@ -7,13 +7,33 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="css/golfScoreCard.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     <!--Custom javascript-->
     <script src="js/golfScoreCard.js" defer></script>
+
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 50%;
+            width: 50%;
+        }
+        #demo {
+            height: 50%;
+            width: 50%;
+        }
+    </style>
+
 </head>
-<body>
+<body onload="onload()">
 
 <!--Start with a way to select a course? Later - for now, just have a pre-selected course.-->
 
@@ -28,6 +48,9 @@
 
 </div>
 
+<div id="map"></div>
+
+
 
 <!--Once you start a round, automatically select the first hole.-->
 <!--Show the map of the hole, with buttons on top of it for showing:-->
@@ -41,8 +64,13 @@
 <!--This is the iframe containing the maps. Will probably need to edit this significantly. -->
 <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6201.842986739497!2d-122.58018269767817!3d47.20095192623567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5491aa0fc461d8f3%3A0xab9a56c8ec9cfbe2!2sChambers+Bay!5e1!3m2!1sen!2sus!4v1444405699285" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>-->
 
+<script>
 
 
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv1ioIKaqUyI_As5-HtTEaT59ODPlb-nE&callback=initMap"
+        async defer></script>
 
 
 </body>
