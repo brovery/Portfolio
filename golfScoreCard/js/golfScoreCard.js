@@ -34,17 +34,11 @@
     //Probably need a way to change holes if necessary.
     //reset button?
 
-
-
-
-
 //map crap
 //http://openweathermap.org/appid
 var weatherAppId = "19a21ef97ff0f9444517d8fc89ef7a8d";
 var accessToken, model, weather, courseLatLon, map;
 var courseID = 28069;
-
-
 
 //checks to see if there is an accessToken
 function onload() {
@@ -70,8 +64,7 @@ function getUrlVars() {
     return vars;
 }
 
-
-
+//pulls the object data from swingbyswing.com.
 function getCourse(id) {
     var courseAPI = "https://api.swingbyswing.com/v2/courses/" + id + "?includes=practice_area,nearby_courses,recent_media,recent_comments,recent_rounds,best_rounds,current_rounds,course_stats_month,course_stats_year&access_token="+accessToken;
     var xhttp = new XMLHttpRequest();
@@ -93,16 +86,6 @@ function initMap(cLatLon) {
         mapTypeId: google.maps.MapTypeId.SATELLITE
     });
 }
-
-
-//google maps api code. This is currently in the html.
-//var map;
-//function initMap() {
-//    map = new google.maps.Map(document.getElementById('map'), {
-//        center: {lat: -34.397, lng: 150.644},
-//        zoom: 8
-//    });
-//}
 
 //Putting the copied stuff here.
 
