@@ -37,7 +37,7 @@
 //map crap
 //http://openweathermap.org/appid
 var weatherAppId = "19a21ef97ff0f9444517d8fc89ef7a8d";
-var accessToken, model, weather, courseLatLon, map;
+var accessToken, model, weather, courseLatLon, map, hole=-1;
 var courseID = 28069;
 
 //checks to see if there is an accessToken
@@ -79,14 +79,69 @@ function getCourse(id) {
     xhttp.send();
 }
 
-function initMap(cLatLon) {
+function initMap(cLatLon,holeLatLon,pinLatLons) {
     map = new google.maps.Map(document.getElementById('map'), {
         center: cLatLon,
         zoom: 16,
         mapTypeId: google.maps.MapTypeId.SATELLITE
     });
+
+    //Sets a marker for the course. If you're on a hole, sets the marker for the hole instead.
+    if (holeLatLon == null) {
+        var cMarker = new google.maps.Marker({
+            position: cLatLon,
+            map: map,
+            title: "Course"
+        });
+    } else {
+        var hMarker = new google.maps.Marker({
+            position: holeLatLon,
+            map: map,
+            title: "Hole"
+        });
+    }
+
+    if (pinLatLons == null) return;
+
+    //place markers, if any, into the map.
+    for (var i = 0; i<pinLatLons.length; i++) {
+        var teeMarker = new google.maps.Marker({
+            position: pinLatLons[i],
+            map: map,
+            title: "pin"+i
+        });
+    }
 }
 
+//starts the round: Loads the first hole map with markers, and the hole-buttons.
+function startRound() {
+    var holeLatLon = getHoleLoc(), pinLatLons = getPinLoc();
+    var centerLatLon = centerMap(holeLatLon,pinLatLons);
+    initMap(centerLatLon,holeLatLon,pinLatLons);
+}
+
+
+//grabs the hole location.
+function getHoleLoc() {
+    hole++;
+    return model.course.holes[hole].green_location;
+}
+
+//grabs the pin locations.
+function getPinLoc() {
+    var arr = [];
+    for (var i = 0; i < model.course.holes[hole].tee_boxes.length; i++) {
+        arr.push(model.course.holes[hole].tee_boxes[i].location);
+    }
+    return arr;
+}
+
+//centers the lat-lon between the first tee and the hole.
+function centerMap(hLatLon,pinLatLons) {
+    var lat = (hLatLon.lat+pinLatLons[0].lat)/2;
+    var lng = (hLatLon.lng+pinLatLons[0].lng)/2;
+    return {"lat":lat, "lng":lng};
+}
 //Putting the copied stuff here.
 
 //var model = {
