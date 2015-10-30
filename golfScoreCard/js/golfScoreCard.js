@@ -24,10 +24,6 @@
 //}
 
 
-//Need a hole builder:
-//Will replace the map with the current hole's map.
-//Buttons should not change?
-
 //Scorecard builder:
 //Opens modal? that shows a score selector with score & # of putts.
 //Probably need a way to change holes if necessary.
@@ -78,52 +74,35 @@ function getCourse(id) {
     xhttp.send();
 }
 
-function initMap(cLatLon, holeLatLon, pinLatLons) {
+function initMap(cLatLon, hLatLon, pinLatLons) {
     map = new google.maps.Map(document.getElementById('map'), {
         center: cLatLon,
-        //zoom: 16,
+        zoom: 16,
         mapTypeId: google.maps.MapTypeId.SATELLITE
     });
 
-    var LatLngList = [];
     //Sets a marker for the course. If you're on a hole, sets the marker for the hole instead.
-    if (holeLatLon == null) {
+    if (hLatLon == null) {
         var cMarker = new google.maps.Marker({
             position: cLatLon,
             map: map,
             title: "Course"
         });
-        LatLngList.push(cLatLon);
     } else {
         var hMarker = new google.maps.Marker({
-            position: holeLatLon,
+            position: hLatLon,
             map: map,
             title: "Hole"
         });
-        LatLngList.push(holeLatLon);
-    }
+        for (var i = 0; i < pinLatLons.length - 1; i++) {
+            var teeMarker = new google.maps.Marker({
+                position: pinLatLons[i],
+                map: map,
+                title: "pin" + i
+            });
+        }
 
-    if (pinLatLons == null) return;
-
-    //place markers, if any, into the map.
-    for (var i = 0; i < pinLatLons.length - 1; i++) {
-        var teeMarker = new google.maps.Marker({
-            position: pinLatLons[i],
-            map: map,
-            title: "pin" + i
-        });
-        LatLngList.push(pinLatLons[i]);
     }
-
-//  Create a new viewpoint bound
-    var bounds = new google.maps.LatLngBounds();
-//  Go through each...
-    for (var j = 0; j < LatLngList.length; j++) {
-        //  And increase the bounds to take this point
-        bounds.extend(LatLngList[i]);
-    }
-//  Fit these bounds to the map
-    map.fitBounds(bounds);
 }
 
 //starts the round: Loads the first hole map with markers, and the hole-buttons.
@@ -131,8 +110,8 @@ function startRound() {
     var holeLatLon = getHoleLoc(), pinLatLons = getPinLoc();
     var centerLatLon = centerMap(holeLatLon, pinLatLons);
     initMap(centerLatLon, holeLatLon, pinLatLons);
+    document.getElementById("startRound").innerHTML = "Next Hole";
 }
-
 
 //grabs the hole location.
 function getHoleLoc() {
@@ -143,7 +122,7 @@ function getHoleLoc() {
 //grabs the pin locations.
 function getPinLoc() {
     var arr = [];
-    for (var i = 0; i < model.course.holes[hole].tee_boxes.length; i++) {
+    for (var i = 0; i < model.course.holes[hole].tee_boxes.length-1; i++) {
         arr.push(model.course.holes[hole].tee_boxes[i].location);
     }
     return arr;
