@@ -75,7 +75,8 @@ function getCourse(id) {
 }
 
 function initMap(cLatLon, hLatLon, pinLatLons) {
-    map = new google.maps.Map(document.getElementById('map'), {
+    var pointCount = 1, bounds = new google.maps.LatLngBounds();
+    var map = new google.maps.Map(document.getElementById('map'), {
         center: cLatLon,
         zoom: 16,
         mapTypeId: google.maps.MapTypeId.SATELLITE
@@ -100,8 +101,14 @@ function initMap(cLatLon, hLatLon, pinLatLons) {
                 map: map,
                 title: "pin" + i
             });
+            pointCount++; //Add counter to indicate whether we need to reset the zoom.
+            bounds.extend(pinLatLons[i]); //Extend the bounds of the map.
         }
+    }
 
+//This statement should change the zoom level of the map according to the placement of the markers.
+    if (pointCount > 1) {
+        map.fitBounds(bounds);
     }
 }
 
