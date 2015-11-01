@@ -149,6 +149,12 @@ function centerMap(hLatLon, pLatLons) {
 //Player initializer
 function addPlayer(pName,pHandi,pTees){
     var pName = new Player(pName,pHandi,pTees);
+    var parent = document.getElementById("playerScores");
+    var pNameDiv = "<div class='pScore' id='"+pName.name+"'>"+pName.name+"</div>";
+    var scoreInput = "<select id='' class='form-control'><option>1</option><option>2</option><option>3</option>" +
+        "<option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>";
+    var scoreBtn = "<button type='button' class='btn btn-info' id='"+pName.name+"')>Enter Score</button></br>";
+    parent.innerHTML += pNameDiv+scoreInput+scoreBtn;
 }
 
 //Player object constructor.
@@ -178,8 +184,30 @@ function Player(name,handi,tees) {
 //starts the round: Loads the first hole map with markers, and the hole-buttons.
 function startRound() {
     //TODO: Need to put an if statement here that ends the round if you've completed 18 holes.
+    var parent = document.getElementById("golfScoreCard");
+    var child = document.getElementById("start");
+    parent.removeChild(child);
+    child = document.getElementById("players");
+    parent.removeChild(child);
+    var holeLatLon = getHoleLoc(), pinLatLons = getPinLoc();
+    var centerLatLon = centerMap(holeLatLon, pinLatLons);
+    parent.innerHTML += "<button class='btn btn-info btn-lg' id='nextHole' onclick='nextHole()'>Next Hole</button>";
+    parent.innerHTML += "<button class='btn btn-info btn-lg' id='enterScore' data-toggle='modal' data-target='#myModal2'>Enter Score</button>";
+    initMap(centerLatLon, holeLatLon, pinLatLons);
+}
+
+//Starts the next hole.
+function nextHole(){
     var holeLatLon = getHoleLoc(), pinLatLons = getPinLoc();
     var centerLatLon = centerMap(holeLatLon, pinLatLons);
     initMap(centerLatLon, holeLatLon, pinLatLons);
-    document.getElementById("startRound").innerHTML = "Next Hole";
 }
+
+//Enters scores for the players.
+function enterScore(name){
+    //TODO: This should grab the hole# we're on, and add to the player object a holenum:score key/value pair.
+    //TODO: Or, perhaps it adds the score to the player score array. This will make it harder to determine what holes need to be done, if the player jumps around.
+}
+
+//TODO: This needs to be dynamic - we don't know what the player names are going to be, but need to enter a score for them.
+document.getElementById("Brandon").addEventListener("click",enterScore("Brandon"));
