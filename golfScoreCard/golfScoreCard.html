@@ -22,14 +22,19 @@
             margin: 0;
             padding: 0;
         }
+
         #map {
             height: 400px;
             width: 800px;
+
         }
-        #demo {
-            height: 50%;
-            width: 50%;
+
+        .myDivStyle {
+            text-align: center;
         }
+
+
+
     </style>
 
 </head>
@@ -38,27 +43,72 @@
 <!--Start with a way to select a course? Later - for now, just have a pre-selected course.-->
 
 
-<!--Have a page that shows the basic course info.-->
-    <!--Holes, par, length, slope, enter handicap, etc. -->
-    <!--Have buttons: Start Round, -->
+
 
 <div class="container">
 
-    Container div
+    <!--Have a page that shows the basic course info.-->
+    <!--Holes, par, length, slope, enter handicap, etc. -->
+    <!--Have buttons: Start Round, -->
+    <div class="myDivStyle col-lg-12 col-sm-12" id="start">
+        <!--Div that holes the page start info. This div will have:-->
+        <h1>Welcome! You have selected the <span>Augusta National Golf Club!</span></h1>
+        <h3>Enjoy your round!</h3>
+        <h4>To begin, enter the players below, then press Start Round.</h4>
+        <h4>Holes: <span id="holeSpan"></span></h4>
+        <h4>Par: <span id="parSpan"></span></h4>
+        <h4>length: <span id="lengthSpan"></span></h4>
+        <button class="btn btn-info btn-lg" id="addPlayer" data-toggle="modal" data-target="#myModal">Add a Player</button>
+
+        <!--This is the player modal that opens, allowing for the entering of player data.-->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add up to four Players</h4>
+                    </div>
+                    <div class="modal-body">
+                        Name: <input id="playerName" type="text" value="Name"/><br/>
+                        Handicap: <input id="playerHandi" type="number" maxlength="2"/><br/>
+                        Tees:
+                        <!-- TODO: make the tees dynamic according to the course.-->
+                        <select id="courseTees" class="form-control" style="width: 100px; float: right">
+                            <option>Black</option>
+                            <option>White</option>
+                        </select>
+                        <div id="playersAdded"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info"
+                                onclick="addPlayer(document.getElementById('playerName').value,
+                                document.getElementById('playerHandi').value,
+                                document.getElementById('courseTees').value)">Submit</button>
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <button class="btn btn-info btn-lg" id="startRound" onclick="startRound()">Start Round</button>
+    </div>
+    <div class="playerDiv col-lg-12 col-sm-12" id="players">
+
+    </div>
+
+    <div id="map"></div>
 
 
-<div id="map"></div>
+    <!--Once you start a round, automatically select the first hole.-->
 
 
-
-<!--Once you start a round, automatically select the first hole.-->
-
-<button id="startRound" onclick="startRound()">Start Round</button>
-<!--Show the map of the hole, with buttons on top of it for showing:-->
-<!--Scorecard, select a different hole, add a score for this hole.-->
+    <!--Show the map of the hole, with buttons on top of it for showing:-->
+    <!--Scorecard, select a different hole, add a score for this hole.-->
 
 
-<!--Hole Scorecard: have a place to enter score (slider?). Have a way to enter # of putts.-->
+    <!--Hole Scorecard: have a place to enter score (slider?). Have a way to enter # of putts.-->
     <!--Have a way to reset the score.-->
 
 

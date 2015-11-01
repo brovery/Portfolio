@@ -32,13 +32,14 @@
 //map crap
 //http://openweathermap.org/appid
 var weatherAppId = "19a21ef97ff0f9444517d8fc89ef7a8d";
-var accessToken, model, weather, courseLatLon, map, hole = -1;
+var accessToken, model, weather, courseLatLon, map, hole = -1, players = 0;
 var courseID = 28069;
 
 //checks to see if there is an accessToken
 function onload() {
     var redirectURI = document.URL;
-    var myClientID = "a9d8519f-09d8-40f7-92c8-8ebe837c29a7";
+    //var myClientID = "a9d8519f-09d8-40f7-92c8-8ebe837c29a7"; //This one is for localhost 63342
+    var myClientID = "a8302637-f515-41d4-b38a-9e13077809f7"; //This one is for localhost 63343.
     var authUrl = "https://api.swingbyswing.com/v2/oauth/authorize?scope=read&redirect_uri=" + redirectURI + "&response_type=token&client_id=" + myClientID;
     accessToken = getUrlVars().access_token;
     if (accessToken == null) {
@@ -68,6 +69,9 @@ function getCourse(id) {
             model = JSON.parse(xhttp.responseText);
             courseLatLon = model.course.location;
             initMap(courseLatLon);
+            document.getElementById("holeSpan").innerHTML = model.course.hole_count;
+            document.getElementById("parSpan").innerHTML = model.course.tee_types[1].par;
+            document.getElementById("lengthSpan").innerHTML = model.course.tee_types[1].yards;
         }
     };
     xhttp.open("GET", courseAPI, true);
@@ -90,34 +94,29 @@ function initMap(cLatLon, hLatLon, pinLatLons) {
             title: "Course"
         });
     } else {
+        var gHLatLon = new google.maps.LatLng(hLatLon.lat,hLatLon.lng);
+        bounds.extend(gHLatLon);
         var hMarker = new google.maps.Marker({
             position: hLatLon,
             map: map,
             title: "Hole"
         });
-        for (var i = 0; i < pinLatLons.length - 1; i++) {
+        for (var i = 0; i < pinLatLons.length; i++) {
             var teeMarker = new google.maps.Marker({
-                position: pinLatLons[i],
+                position: pinLatLons[i].latLng,
                 map: map,
-                title: "pin" + i
+                title: pinLatLons[i].name
             });
             pointCount++; //Add counter to indicate whether we need to reset the zoom.
-            bounds.extend(pinLatLons[i]); //Extend the bounds of the map.
+            var thisLatLng = new google.maps.LatLng(pinLatLons[i].latLng.lat,pinLatLons[i].latLng.lng);
+            bounds.extend(thisLatLng); //Extend the bounds of the map.
         }
     }
 
-//This statement should change the zoom level of the map according to the placement of the markers.
+    //This statement should change the zoom level of the map according to the placement of the markers.
     if (pointCount > 1) {
         map.fitBounds(bounds);
     }
-}
-
-//starts the round: Loads the first hole map with markers, and the hole-buttons.
-function startRound() {
-    var holeLatLon = getHoleLoc(), pinLatLons = getPinLoc();
-    var centerLatLon = centerMap(holeLatLon, pinLatLons);
-    initMap(centerLatLon, holeLatLon, pinLatLons);
-    document.getElementById("startRound").innerHTML = "Next Hole";
 }
 
 //grabs the hole location.
@@ -130,24 +129,40 @@ function getHoleLoc() {
 function getPinLoc() {
     var arr = [];
     for (var i = 0; i < model.course.holes[hole].tee_boxes.length-1; i++) {
-        arr.push(model.course.holes[hole].tee_boxes[i].location);
+        var myObj = {
+            "latLng": model.course.holes[hole].tee_boxes[i].location,
+            "name": model.course.holes[hole].tee_boxes[i].tee_color_type
+        };
+        arr.push(myObj);
     }
     return arr;
 }
 
 //centers the lat-lon between the first tee and the hole.
 function centerMap(hLatLon, pLatLons) {
-    var lat = (hLatLon.lat + pLatLons[0].lat) / 2;
-    var lng = (hLatLon.lng + pLatLons[0].lng) / 2;
+    var lat = (hLatLon.lat + pLatLons[0].latLng.lat) / 2;
+    var lng = (hLatLon.lng + pLatLons[0].latLng.lng) / 2;
     return {"lat": lat, "lng": lng};
 }
 
 //Player creation section!
+//Player initializer
+function addPlayer(pName,pHandi,pTees){
+    var pName = new Player(pName,pHandi,pTees);
+}
 
 //Player object constructor.
-function Player(name) {
+function Player(name,handi,tees) {
+    players++;
     this.name = name;
     this.score = [];
+    this.handicap = Number(handi);
+    this.tee_color = tees;
+    document.getElementById("players").innerHTML +=
+        "<div class='playerDiv' id='"+this.name+"'>"+this.name+": Handicap: "+this.handicap+
+        " Tees: "+this.tee_color+"</div>";
+    if (players === 1) {document.getElementById("playersAdded").innerHTML += "Added: "+this.name;}
+    else {document.getElementById("playersAdded").innerHTML += ", "+this.name;}
     this.setScore = function (hole, score) {
         this.score[hole] = score;
     };
@@ -158,3 +173,13 @@ function Player(name) {
     }
 }
 
+//Start the round & enter scores!
+
+//starts the round: Loads the first hole map with markers, and the hole-buttons.
+function startRound() {
+    //TODO: Need to put an if statement here that ends the round if you've completed 18 holes.
+    var holeLatLon = getHoleLoc(), pinLatLons = getPinLoc();
+    var centerLatLon = centerMap(holeLatLon, pinLatLons);
+    initMap(centerLatLon, holeLatLon, pinLatLons);
+    document.getElementById("startRound").innerHTML = "Next Hole";
+}
