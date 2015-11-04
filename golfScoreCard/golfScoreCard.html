@@ -44,7 +44,6 @@
 
 
 
-
 <div class="container" id="golfScoreCard">
 
     <!--Have a page that shows the basic course info.-->
@@ -58,7 +57,7 @@
         <h4>Holes: <span id="holeSpan"></span></h4>
         <h4>Par: <span id="parSpan"></span></h4>
         <h4>length: <span id="lengthSpan"></span></h4>
-        <button class="btn btn-info btn-lg" id="addPlayer" data-toggle="modal" data-target="#myModal">Add a Player</button>
+        <button class="btn btn-info btn-lg" id="addPlayer" data-toggle="modal" data-target="#myModal">Add Players</button>
 
         <!--This is the player modal that opens, allowing for the entering of player data.-->
         <div class="modal fade" id="myModal" role="dialog">
@@ -71,21 +70,61 @@
                         <h4 class="modal-title">Add up to four Players</h4>
                     </div>
                     <div class="modal-body">
-                        Name: <input id="playerName" type="text" value="Name"/><br/>
-                        Handicap: <input id="playerHandi" type="number" maxlength="2"/><br/>
-                        Tees:
-                        <!-- TODO: make the tees dynamic according to the course.-->
-                        <select id="courseTees" class="form-control" style="width: 100px; float: right">
-                            <option>Black</option>
-                            <option>White</option>
-                        </select>
-                        <div id="playersAdded"></div>
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <label for="p1Name">Name</label>
+                                <input id="p1Name" class="form-control" type="text"/>
+                                <label for="p1Cap">Handicap</label>
+                                <input id="p1Cap" class="form-control" type="number"/>
+                                <label for="p1Tees">Tees</label>
+                                <!-- TODO: make the tees dynamic according to the course.-->
+                                <select id="p1Tees" class="form-control">
+                                    <option>Black</option>
+                                    <option>White</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="p2Name">Name</label>
+                                <input id="p2Name" class="form-control" type="text"/>
+                                <label for="p2Cap">Handicap</label>
+                                <input id="p2Cap" class="form-control" type="number"/>
+                                <label for="p2Tees">Tees</label>
+                                <!-- TODO: make the tees dynamic according to the course.-->
+                                <select id="p2Tees" class="form-control">
+                                    <option>Black</option>
+                                    <option>White</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="p3Name">Name</label>
+                                <input id="p3Name" class="form-control" type="text"/>
+                                <label for="p3Cap">Handicap</label>
+                                <input id="p3Cap" class="form-control" type="number"/>
+                                <label for="p3Tees">Tees</label>
+                                <!-- TODO: make the tees dynamic according to the course.-->
+                                <select id="p3Tees" class="form-control">
+                                    <option>Black</option>
+                                    <option>White</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="p4Name">Name</label>
+                                <input id="p4Name" class="form-control" type="text"/>
+                                <label for="p4Cap">Handicap</label>
+                                <input id="p4Cap" class="form-control" type="number"/>
+                                <label for="p4Tees">Tees</label>
+                                <!-- TODO: make the tees dynamic according to the course.-->
+                                <select id="p4Tees" class="form-control">
+                                    <option>Black</option>
+                                    <option>White</option>
+                                </select>
+                            </div>
+                        </form>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-info"
-                                onclick="addPlayer(document.getElementById('playerName').value,
-                                document.getElementById('playerHandi').value,
-                                document.getElementById('courseTees').value)">Submit</button>
+                                onclick="addPlayer()">Submit</button>
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -100,7 +139,7 @@
 
     <div id="map"></div>
 
-    <div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal fade" id="addScoreModal" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->

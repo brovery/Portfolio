@@ -1,45 +1,14 @@
-//Need an object that stores the information about the course:
-
-//scoreboard {
-//    course {
-//        holes{
-//            teeW yardage //Women - red
-//            teeM yardage // Men - white
-//            teeC yardage //champ. - blue
-//            teeP yardage //Pro. - black
-//            par
-//            map coordinates
-//        }
-//    }
-//    //This part of the object builds the player's scores.
-//    player {
-//        Handicap //stores a value that
-//        hole score {//stores a score for each hole. {
-//            score
-//            putts
-//        }
-//
-//
-//    }
-//}
-
-
-//Scorecard builder:
-//Opens modal? that shows a score selector with score & # of putts.
-//Probably need a way to change holes if necessary.
-//reset button?
-
 //map crap
 //http://openweathermap.org/appid
-var weatherAppId = "19a21ef97ff0f9444517d8fc89ef7a8d";
-var accessToken, model, weather, courseLatLon, map, hole = -1, players = 0;
+//var weatherAppId = "19a21ef97ff0f9444517d8fc89ef7a8d";
+var accessToken, model, courseLatLon, map, hole = -1, players = [];
 var courseID = 28069;
 
 //checks to see if there is an accessToken
 function onload() {
     var redirectURI = document.URL;
-    //var myClientID = "a9d8519f-09d8-40f7-92c8-8ebe837c29a7"; //This one is for localhost 63342
-    var myClientID = "a8302637-f515-41d4-b38a-9e13077809f7"; //This one is for localhost 63343.
+    var myClientID = "a9d8519f-09d8-40f7-92c8-8ebe837c29a7"; //This one is for localhost 63342
+    //var myClientID = "a8302637-f515-41d4-b38a-9e13077809f7"; //This one is for localhost 63343.
     var authUrl = "https://api.swingbyswing.com/v2/oauth/authorize?scope=read&redirect_uri=" + redirectURI + "&response_type=token&client_id=" + myClientID;
     accessToken = getUrlVars().access_token;
     if (accessToken == null) {
@@ -147,28 +116,54 @@ function centerMap(hLatLon, pLatLons) {
 
 //Player creation section!
 //Player initializer
-function addPlayer(pName,pHandi,pTees){
-    var pName = new Player(pName,pHandi,pTees);
-    var parent = document.getElementById("playerScores");
-    var pNameDiv = "<div class='pScore' id='"+pName.name+"'>"+pName.name+"</div>";
-    var scoreInput = "<select id='' class='form-control'><option>1</option><option>2</option><option>3</option>" +
-        "<option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>";
-    var scoreBtn = "<button type='button' class='btn btn-info' id='"+pName.name+"')>Enter Score</button></br>";
-    parent.innerHTML += pNameDiv+scoreInput+scoreBtn;
+function addPlayer(){
+    var p1Name = document.getElementById("p1Name").value;
+    var p1Cap = document.getElementById("p1Cap").value;
+    var p1Tees = document.getElementById("p1Tees").value;
+    var p2Name = document.getElementById("p2Name").value;
+    var p2Cap = document.getElementById("p2Cap").value;
+    var p2Tees = document.getElementById("p2Tees").value;
+    var p3Name = document.getElementById("p3Name").value;
+    var p3Cap = document.getElementById("p3Cap").value;
+    var p3Tees = document.getElementById("p3Tees").value;
+    var p4Name = document.getElementById("p4Name").value;
+    var p4Cap = document.getElementById("p4Cap").value;
+    var p4Tees = document.getElementById("p4Tees").value;
+
+    if (p1Name !== "") {
+        Player1 = new Player(p1Name,p1Cap,p1Tees);
+        players.push(Player1);
+    }
+    if (p2Name !== "") {
+        Player2 = new Player(p2Name,p2Cap,p2Tees);
+        players.push(Player2);
+    }
+    if (p3Name !== "") {
+        Player3 = new Player(p3Name,p3Cap,p3Tees);
+        players.push(Player3);
+    }
+    if (p4Name !== "") {
+        Player4 = new Player(p4Name,p4Cap,p4Tees);
+        players.push(Player4);
+    }
+
+    //var parent = document.getElementById("playerScores");
+    //var pNameDiv = "<div class='pScore'>"+pName.name+"</div>";
+    //var scoreInput = "<select id='" + pName.name + "' class='form-control'><option>1</option><option>2</option><option>3</option>" +
+    //    "<option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>";
+    //var scoreBtn = "<button type='button' class='btn btn-info' onclick='enterScore('" + pName.name + "')'>Enter Score</button></br>";
+    //parent.innerHTML += pNameDiv+scoreInput+scoreBtn;
 }
 
 //Player object constructor.
 function Player(name,handi,tees) {
-    players++;
     this.name = name;
-    this.score = [];
+    this.score = {};
     this.handicap = Number(handi);
     this.tee_color = tees;
     document.getElementById("players").innerHTML +=
         "<div class='playerDiv' id='"+this.name+"'>"+this.name+": Handicap: "+this.handicap+
         " Tees: "+this.tee_color+"</div>";
-    if (players === 1) {document.getElementById("playersAdded").innerHTML += "Added: "+this.name;}
-    else {document.getElementById("playersAdded").innerHTML += ", "+this.name;}
     this.setScore = function (hole, score) {
         this.score[hole] = score;
     };
@@ -192,7 +187,7 @@ function startRound() {
     var holeLatLon = getHoleLoc(), pinLatLons = getPinLoc();
     var centerLatLon = centerMap(holeLatLon, pinLatLons);
     parent.innerHTML += "<button class='btn btn-info btn-lg' id='nextHole' onclick='nextHole()'>Next Hole</button>";
-    parent.innerHTML += "<button class='btn btn-info btn-lg' id='enterScore' data-toggle='modal' data-target='#myModal2'>Enter Score</button>";
+    parent.innerHTML += "<button class='btn btn-info btn-lg' id='enterScore' data-toggle='modal' data-target='#addScoreModal'>Enter Score</button>";
     initMap(centerLatLon, holeLatLon, pinLatLons);
 }
 
@@ -205,9 +200,10 @@ function nextHole(){
 
 //Enters scores for the players.
 function enterScore(name){
+    console.log(name);
+    name.score[hole] = document.getElementById(name);
+
     //TODO: This should grab the hole# we're on, and add to the player object a holenum:score key/value pair.
     //TODO: Or, perhaps it adds the score to the player score array. This will make it harder to determine what holes need to be done, if the player jumps around.
 }
 
-//TODO: This needs to be dynamic - we don't know what the player names are going to be, but need to enter a score for them.
-document.getElementById("Brandon").addEventListener("click",enterScore("Brandon"));
