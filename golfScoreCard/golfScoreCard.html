@@ -89,7 +89,6 @@
                                 <label for="p2Cap">Handicap</label>
                                 <input id="p2Cap" class="form-control" type="number"/>
                                 <label for="p2Tees">Tees</label>
-                                <!-- TODO: make the tees dynamic according to the course.-->
                                 <select id="p2Tees" class="form-control">
                                     <option>Black</option>
                                     <option>White</option>
@@ -101,7 +100,6 @@
                                 <label for="p3Cap">Handicap</label>
                                 <input id="p3Cap" class="form-control" type="number"/>
                                 <label for="p3Tees">Tees</label>
-                                <!-- TODO: make the tees dynamic according to the course.-->
                                 <select id="p3Tees" class="form-control">
                                     <option>Black</option>
                                     <option>White</option>
@@ -113,7 +111,6 @@
                                 <label for="p4Cap">Handicap</label>
                                 <input id="p4Cap" class="form-control" type="number"/>
                                 <label for="p4Tees">Tees</label>
-                                <!-- TODO: make the tees dynamic according to the course.-->
                                 <select id="p4Tees" class="form-control">
                                     <option>Black</option>
                                     <option>White</option>
@@ -123,9 +120,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info"
-                                onclick="addPlayer()">Submit</button>
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-info" onclick="addPlayer()" data-dismiss="modal">Submit</button>
                     </div>
                 </div>
 
@@ -139,6 +134,7 @@
 
     <div id="map"></div>
 
+    <!--This is the score modal, which opens with a dynamically-build score selector for each player created earlier.-->
     <div class="modal fade" id="addScoreModal" role="dialog">
         <div class="modal-dialog">
 
@@ -146,26 +142,23 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Enter score for each player</h4>
+                    <h4 class="modal-title" id="scoreModalHead"></h4>
                 </div>
                 <div class="modal-body" id="playerScores">
 
-
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" onclick="enterScore()" data-dismiss="modal">Submit</button>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!--Scorecard, select a different hole, add a score for this hole.-->
+    <!--TODO: I need to add a hamburger button that allows for: 1) View Scorecard, 2) select a different hole-->
 
 
-    <!--Hole Scorecard: have a place to enter score (slider?). Have a way to enter # of putts.-->
-    <!--Have a way to reset the score.-->
+    <!--TODO: Add the scorecard page. Should I have this in a modal or in its own page?-->
 
 
 </div>

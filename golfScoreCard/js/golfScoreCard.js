@@ -1,7 +1,7 @@
 //map crap
 //http://openweathermap.org/appid
 //var weatherAppId = "19a21ef97ff0f9444517d8fc89ef7a8d";
-var accessToken, model, courseLatLon, map, hole = -1, players = [];
+var accessToken, model, courseLatLon, map, hole = 0, players = [];
 var courseID = 28069;
 
 //checks to see if there is an accessToken
@@ -63,7 +63,7 @@ function initMap(cLatLon, hLatLon, pinLatLons) {
             title: "Course"
         });
     } else {
-        var gHLatLon = new google.maps.LatLng(hLatLon.lat,hLatLon.lng);
+        var gHLatLon = new google.maps.LatLng(hLatLon.lat,hLatLon.lng); //I had to convert the object to google maps latlng for the fitbounds to work.
         bounds.extend(gHLatLon);
         var hMarker = new google.maps.Marker({
             position: hLatLon,
@@ -86,12 +86,6 @@ function initMap(cLatLon, hLatLon, pinLatLons) {
     if (pointCount > 1) {
         map.fitBounds(bounds);
     }
-}
-
-//grabs the hole location.
-function getHoleLoc() {
-    hole++;
-    return model.course.holes[hole].green_location;
 }
 
 //grabs the pin locations.
@@ -147,12 +141,17 @@ function addPlayer(){
         players.push(Player4);
     }
 
-    //var parent = document.getElementById("playerScores");
-    //var pNameDiv = "<div class='pScore'>"+pName.name+"</div>";
-    //var scoreInput = "<select id='" + pName.name + "' class='form-control'><option>1</option><option>2</option><option>3</option>" +
-    //    "<option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>";
-    //var scoreBtn = "<button type='button' class='btn btn-info' onclick='enterScore('" + pName.name + "')'>Enter Score</button></br>";
-    //parent.innerHTML += pNameDiv+scoreInput+scoreBtn;
+    //This section builds the scoring modal.
+    var parent = document.getElementById("playerScores");
+    for (var i = 0; i<players.length; i++) {
+        parent.innerHTML += '<div class="pScores" id="'+players[i].name+'">'+players[i].name+': </div>';
+        parent.innerHTML += '<select class="form-control" id="'+players[i].name+'Select">' +
+                '<option>1</option><option>2</option><option>3</option><option>4</option>'+
+                '<option>5</option><option>6</option><option>7</option><option>8</option>';
+        //TODO: Add an inline selector that will allow for entering putts. Will require restructuring score object.
+
+    }
+
 }
 
 //Player object constructor.
@@ -161,12 +160,6 @@ function Player(name,handi,tees) {
     this.score = {};
     this.handicap = Number(handi);
     this.tee_color = tees;
-    document.getElementById("players").innerHTML +=
-        "<div class='playerDiv' id='"+this.name+"'>"+this.name+": Handicap: "+this.handicap+
-        " Tees: "+this.tee_color+"</div>";
-    this.setScore = function (hole, score) {
-        this.score[hole] = score;
-    };
     this.getTotalScore = function () {
         return this.score.reduce(function (a, b) {
             return a + b;
@@ -181,10 +174,12 @@ function startRound() {
     //TODO: Need to put an if statement here that ends the round if you've completed 18 holes.
     var parent = document.getElementById("golfScoreCard");
     var child = document.getElementById("start");
+    var myHole = hole+1;
+    document.getElementById("scoreModalHead").innerHTML = "Enter score for hole " + myHole;
     parent.removeChild(child);
     child = document.getElementById("players");
     parent.removeChild(child);
-    var holeLatLon = getHoleLoc(), pinLatLons = getPinLoc();
+    var holeLatLon = model.course.holes[hole].green_location, pinLatLons = getPinLoc();
     var centerLatLon = centerMap(holeLatLon, pinLatLons);
     parent.innerHTML += "<button class='btn btn-info btn-lg' id='nextHole' onclick='nextHole()'>Next Hole</button>";
     parent.innerHTML += "<button class='btn btn-info btn-lg' id='enterScore' data-toggle='modal' data-target='#addScoreModal'>Enter Score</button>";
@@ -193,15 +188,26 @@ function startRound() {
 
 //Starts the next hole.
 function nextHole(){
-    var holeLatLon = getHoleLoc(), pinLatLons = getPinLoc();
+    hole++;
+    var myHole = hole+1; //hole is an array index, where index0 = hole 1.
+    var holeLatLon = model.course.holes[hole].green_location;
+    var pinLatLons = getPinLoc();
     var centerLatLon = centerMap(holeLatLon, pinLatLons);
+    document.getElementById("scoreModalHead").innerHTML = "Enter score for hole " + myHole;
     initMap(centerLatLon, holeLatLon, pinLatLons);
 }
 
 //Enters scores for the players.
-function enterScore(name){
-    console.log(name);
-    name.score[hole] = document.getElementById(name);
+function enterScore(){
+    //Need to grab the scores from the modal select (id: playerName+"Select").
+    //Now I have the scores, so I need to add the scores to the player object's score object.
+
+    for (var i = 0; i<players.length; i++) {
+        var id = players[i].name+"Select";
+        var score = document.getElementById(id).value;
+        var thisHole = hole+1;
+        players[i].score[thisHole] = score;
+    }
 
     //TODO: This should grab the hole# we're on, and add to the player object a holenum:score key/value pair.
     //TODO: Or, perhaps it adds the score to the player score array. This will make it harder to determine what holes need to be done, if the player jumps around.
