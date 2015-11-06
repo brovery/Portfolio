@@ -208,8 +208,5 @@ function enterScore(){
         var thisHole = hole+1;
         players[i].score[thisHole] = score;
     }
-
-    //TODO: This should grab the hole# we're on, and add to the player object a holenum:score key/value pair.
-    //TODO: Or, perhaps it adds the score to the player score array. This will make it harder to determine what holes need to be done, if the player jumps around.
 }
 

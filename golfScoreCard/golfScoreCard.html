@@ -32,7 +32,9 @@
         .myDivStyle {
             text-align: center;
         }
-
+        .scorecard{
+            /*display: none;*/
+        }
 
 
     </style>
@@ -42,8 +44,8 @@
 
 <!--Start with a way to select a course? Later - for now, just have a pre-selected course.-->
 
-
-
+<!--TODO: Need to make map the main "container", and fit everything else inside of it.-->
+<!--TODO: Need to "fade" the buttons out so that they don't obscure the map.-->
 <div class="container" id="golfScoreCard">
 
     <!--Have a page that shows the basic course info.-->
@@ -52,12 +54,14 @@
     <div class="myDivStyle col-lg-12 col-sm-12" id="start">
         <!--Div that holes the page start info. This div will have:-->
         <h1>Welcome! You have selected the <span>Augusta National Golf Club!</span></h1>
+
         <h3>Enjoy your round!</h3>
         <h4>To begin, enter the players below, then press Start Round.</h4>
         <h4>Holes: <span id="holeSpan"></span></h4>
         <h4>Par: <span id="parSpan"></span></h4>
         <h4>length: <span id="lengthSpan"></span></h4>
-        <button class="btn btn-info btn-lg" id="addPlayer" data-toggle="modal" data-target="#myModal">Add Players</button>
+        <button class="btn btn-info btn-lg" id="addPlayer" data-toggle="modal" data-target="#myModal">Add Players
+        </button>
 
         <!--This is the player modal that opens, allowing for the entering of player data.-->
         <div class="modal fade" id="myModal" role="dialog">
@@ -120,7 +124,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-info" onclick="addPlayer()" data-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-info" onclick="addPlayer()" data-dismiss="modal">Submit
+                        </button>
                     </div>
                 </div>
 
@@ -148,25 +153,36 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info" onclick="enterScore()" data-dismiss="modal">Submit</button>
+                    <button type="button" class="btn btn-info" onclick="enterScore()" data-dismiss="modal">Submit
+                    </button>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!--TODO: I need to add a hamburger button that allows for: 1) View Scorecard, 2) select a different hole-->
 
+    <div class="btn-group col-lg-2 col-lg-offset-10 col-sm-2 col-sm-offset-10" id="myHamburger">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <!-- TODO: Need to have these do something. Remove Home? Not sure I want to work out "going home"-->
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Scorecard</a></li>
+            <li><a href="#">Change hole</a></li>
+            <li><a href="#">Finish Round</a></li>
+        </ul>
+    </div>
 
     <!--TODO: Add the scorecard page. Should I have this in a modal or in its own page?-->
 
+    <div class="scorecard col-lg-12 col-sm-12" id="scorecard">
+        <!-- TODO: Have the scorecard be updated with appropriate names/columns when the names are input.-->
+    </div>
+
 
 </div>
-
-<script>
-
-
-</script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv1ioIKaqUyI_As5-HtTEaT59ODPlb-nE&callback=initMap"
         async defer></script>
