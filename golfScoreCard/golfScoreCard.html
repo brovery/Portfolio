@@ -26,14 +26,25 @@
         #map {
             height: 400px;
             width: 800px;
-
         }
 
         .myDivStyle {
             text-align: center;
         }
-        .scorecard{
+        .scorecard {
             /*display: none;*/
+        }
+        #f9Div {
+            display: none;
+        }
+        #b9Div {
+            display: none;
+        }
+        .myHam {
+            cursor: pointer;
+        }
+        tbody, tr {
+            width: 100% !important;
         }
 
 
@@ -168,17 +179,60 @@
         </button>
         <ul class="dropdown-menu">
             <!-- TODO: Need to have these do something. Remove Home? Not sure I want to work out "going home"-->
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Scorecard</a></li>
-            <li><a href="#">Change hole</a></li>
-            <li><a href="#">Finish Round</a></li>
+            <li><a class="myHam" href="#">Home</a></li>
+            <li><a class="myHam" onclick="openScore()">Scorecard</a></li>
+            <li><a class="myHam" onclick="openScore()">Change hole</a></li>
+            <li><a class="myHam" onclick="finish()">Finish Round</a></li>
         </ul>
     </div>
 
-    <!--TODO: Add the scorecard page. Should I have this in a modal or in its own page?-->
-
+    <!--TODO: I can't get this to go to 100% width. I think the display functions are doing it?-->
     <div class="scorecard col-lg-12 col-sm-12" id="scorecard">
-        <!-- TODO: Have the scorecard be updated with appropriate names/columns when the names are input.-->
+        <!--TODO: build the part of the golf scorecard that is not dynamic.-->
+        <div class="col-lg-12 col-sm-12" id="f9Div">
+            <h1>Front 9</h1>
+            <h5>Click a hole number to go to that hole.</h5>
+            <table class="myTable table table-bordered" id="frontNine">
+                <tr class="myTable">
+                    <th>Hole</th>
+                    <th class="myHam" onclick="gotoHole('1')">1</th>
+                    <th class="myHam" onclick="gotoHole('2')">2</th>
+                    <th class="myHam" onclick="gotoHole('3')">3</th>
+                    <th class="myHam" onclick="gotoHole('4')">4</th>
+                    <th class="myHam" onclick="gotoHole('5')">5</th>
+                    <th class="myHam" onclick="gotoHole('6')">6</th>
+                    <th class="myHam" onclick="gotoHole('7')">7</th>
+                    <th class="myHam" onclick="gotoHole('8')">8</th>
+                    <th class="myHam" onclick="gotoHole('9')">9</th>
+                    <th>Out</th>
+                    <th class="myHam" onclick="scoreSwitch('b9')">Back 9 ></th>
+                    <th>Total</th>
+                </tr>
+                <!--javascript adds the remaining info dynamically-->
+            </table>
+        </div>
+        <div class="col-lg-12 col-sm-12" id="b9Div">
+            <h1>Back 9</h1>
+            <h5>Click a hole number to go to that hole.</h5>
+            <table class="myTable table table-bordered" id="backNine">
+                <tr class="myTable">
+                    <th class="myHam" onclick="scoreSwitch('f9')">< Front 9</th>
+                    <th>Hole</th>
+                    <th class="myHam" onclick="gotoHole('10')">10</th>
+                    <th class="myHam" onclick="gotoHole('11')">11</th>
+                    <th class="myHam" onclick="gotoHole('12')">12</th>
+                    <th class="myHam" onclick="gotoHole('13')">13</th>
+                    <th class="myHam" onclick="gotoHole('14')">14</th>
+                    <th class="myHam" onclick="gotoHole('15')">15</th>
+                    <th class="myHam" onclick="gotoHole('16')">16</th>
+                    <th class="myHam" onclick="gotoHole('17')">17</th>
+                    <th class="myHam" onclick="gotoHole('18')">18</th>
+                    <th>Out</th>
+                    <th>Total</th>
+                </tr>
+                <!--javascript adds the remaining info dynamically-->
+            </table>
+        </div>
     </div>
 
 
