@@ -16,67 +16,18 @@
     <script src="js/golfScoreCard.js" defer></script>
 
 
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        #map {
-            height: 400px;
-            width: 800px;
-        }
-
-        .myDivStyle {
-            text-align: center;
-        }
-        .scorecard {
-            /*display: none;*/
-        }
-        #f9Div {
-            display: none;
-        }
-        #b9Div {
-            display: none;
-        }
-        .myHam {
-            cursor: pointer;
-        }
-        tbody, tr {
-            width: 100% !important;
-        }
-
-
-    </style>
 
 </head>
 <body onload="onload()">
 
 <!--Start with a way to select a course? Later - for now, just have a pre-selected course.-->
 
-<!--TODO: Need to make map the main "container", and fit everything else inside of it.-->
-<!--TODO: Need to "fade" the buttons out so that they don't obscure the map.-->
 <div class="container" id="golfScoreCard">
 
-    <!--Have a page that shows the basic course info.-->
-    <!--Holes, par, length, slope, enter handicap, etc. -->
-    <!--Have buttons: Start Round, -->
-    <div class="myDivStyle col-lg-12 col-sm-12" id="start">
-        <!--Div that holes the page start info. This div will have:-->
-        <h1>Welcome! You have selected the <span>Augusta National Golf Club!</span></h1>
-
-        <h3>Enjoy your round!</h3>
-        <h4>To begin, enter the players below, then press Start Round.</h4>
-        <h4>Holes: <span id="holeSpan"></span></h4>
-        <h4>Par: <span id="parSpan"></span></h4>
-        <h4>length: <span id="lengthSpan"></span></h4>
-        <button class="btn btn-info btn-lg" id="addPlayer" data-toggle="modal" data-target="#myModal">Add Players
-        </button>
-
+    <div class="myDivStyle col-lg-12 col-sm-12">
         <!--This is the player modal that opens, allowing for the entering of player data.-->
         <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
 
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -92,11 +43,7 @@
                                 <label for="p1Cap">Handicap</label>
                                 <input id="p1Cap" class="form-control" type="number"/>
                                 <label for="p1Tees">Tees</label>
-                                <!-- TODO: make the tees dynamic according to the course.-->
-                                <select id="p1Tees" class="form-control">
-                                    <option>Black</option>
-                                    <option>White</option>
-                                </select>
+                                <select id="p1Tees" class="form-control"></select>
                             </div>
                             <div class="form-group">
                                 <label for="p2Name">Name</label>
@@ -104,10 +51,7 @@
                                 <label for="p2Cap">Handicap</label>
                                 <input id="p2Cap" class="form-control" type="number"/>
                                 <label for="p2Tees">Tees</label>
-                                <select id="p2Tees" class="form-control">
-                                    <option>Black</option>
-                                    <option>White</option>
-                                </select>
+                                <select id="p2Tees" class="form-control"></select>
                             </div>
                             <div class="form-group">
                                 <label for="p3Name">Name</label>
@@ -115,10 +59,7 @@
                                 <label for="p3Cap">Handicap</label>
                                 <input id="p3Cap" class="form-control" type="number"/>
                                 <label for="p3Tees">Tees</label>
-                                <select id="p3Tees" class="form-control">
-                                    <option>Black</option>
-                                    <option>White</option>
-                                </select>
+                                <select id="p3Tees" class="form-control"></select>
                             </div>
                             <div class="form-group">
                                 <label for="p4Name">Name</label>
@@ -126,10 +67,7 @@
                                 <label for="p4Cap">Handicap</label>
                                 <input id="p4Cap" class="form-control" type="number"/>
                                 <label for="p4Tees">Tees</label>
-                                <select id="p4Tees" class="form-control">
-                                    <option>Black</option>
-                                    <option>White</option>
-                                </select>
+                                <select id="p4Tees" class="form-control"></select>
                             </div>
                         </form>
 
@@ -142,13 +80,46 @@
 
             </div>
         </div>
-        <button class="btn btn-info btn-lg" id="startRound" onclick="startRound()">Start Round</button>
-    </div>
-    <div class="playerDiv col-lg-12 col-sm-12" id="players">
 
     </div>
 
-    <div id="map"></div>
+    <div class="col-lg-12 col-sm-12" id="mapContainer">
+        <!--TODO: Add a div along the top of the map that lists hole# & yardage. Yardage determined by player1's tees.-->
+
+        <div id="map"></div>
+
+        <div class="btn-group" id="myHamburger">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <!-- TODO: enable the edit player function.-->
+                <!--<li><a class="myHam" data-toggle="modal" data-target="#myModal">Edit Players</a></li>-->
+                <li><a class="myHam" onclick="openScore()">Scorecard</a></li>
+                <li><a class="myHam" onclick="openScore()">Change hole</a></li>
+                <li><a class="myHam" onclick="finish()">Finish Round</a></li>
+            </ul>
+        </div>
+
+
+        <div class="fadedDiv col-lg-8 col-sm-8 col-lg-offset-2 col-sm-offset-2" id="start">
+            <!--Div that holds the page start info. This div will have:-->
+            <h1>Welcome! You have selected the <span>Augusta National Golf Club!</span></h1>
+
+            <h3>Enjoy your round!</h3>
+            <h4>To begin, enter the players below, then press Start Round.</h4>
+            <h4>Holes: <span id="holeSpan"></span></h4>
+            <h4>Par: <span id="parSpan"></span></h4>
+            <h4>length: <span id="lengthSpan"></span></h4>
+        </div>
+
+        <button class="myBtn btn btn-info btn-lg" id="addPlayer" data-toggle="modal" data-target="#myModal">
+            Add Players
+        </button>
+        <button class="myBtn btn btn-info btn-lg" id="startRound" onclick="startRound()">Start Round</button>
+    </div>
+
+
 
     <!--This is the score modal, which opens with a dynamically-build score selector for each player created earlier.-->
     <div class="modal fade" id="addScoreModal" role="dialog">
@@ -172,23 +143,8 @@
         </div>
     </div>
 
-
-    <div class="btn-group col-lg-2 col-lg-offset-10 col-sm-2 col-sm-offset-10" id="myHamburger">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <!-- TODO: Need to have these do something. Remove Home? Not sure I want to work out "going home"-->
-            <li><a class="myHam" href="#">Home</a></li>
-            <li><a class="myHam" onclick="openScore()">Scorecard</a></li>
-            <li><a class="myHam" onclick="openScore()">Change hole</a></li>
-            <li><a class="myHam" onclick="finish()">Finish Round</a></li>
-        </ul>
-    </div>
-
-    <!--TODO: I can't get this to go to 100% width. I think the display functions are doing it?-->
+    <!--Scorecard section. Split up into front9 & back9 for better usability on mobile devices.-->
     <div class="scorecard col-lg-12 col-sm-12" id="scorecard">
-        <!--TODO: build the part of the golf scorecard that is not dynamic.-->
         <div class="col-lg-12 col-sm-12" id="f9Div">
             <h1>Front 9</h1>
             <h5>Click a hole number to go to that hole.</h5>

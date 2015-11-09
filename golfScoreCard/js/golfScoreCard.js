@@ -49,7 +49,16 @@ function getCourse(id) {
 }
 
 function initMap(cLatLon, hLatLon, pinLatLons) {
-    var pointCount = 1, bounds = new google.maps.LatLngBounds();
+    var pointCount = 1, bounds = new google.maps.LatLngBounds(), icon = {};
+
+    icon = {
+        url: "images/hole_flag.png",
+        size: new google.maps.Size(120, 120),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(20, 40),
+        scaledSize: new google.maps.Size(60, 60)
+    };
+
     var map = new google.maps.Map(document.getElementById('map'), {
         center: cLatLon,
         zoom: 16,
@@ -69,14 +78,33 @@ function initMap(cLatLon, hLatLon, pinLatLons) {
         var hMarker = new google.maps.Marker({
             position: hLatLon,
             map: map,
-            title: "Hole"
+            title: "Hole",
+            icon: icon
         });
         for (var i = 0; i < pinLatLons.length; i++) {
-            //TODO: Make the tee markers colored according to the tee color.
+            if (pinLatLons[i].name == "black") {
+                icon = {
+                    url: "images/black_pin.png",
+                    size: new google.maps.Size(290, 400),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(14, 40),
+                    scaledSize: new google.maps.Size(29, 40)
+                };
+            } else {
+                icon = {
+                    url: "images/white_pin.png",
+                    size: new google.maps.Size(426, 597),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(14, 40),
+                    scaledSize: new google.maps.Size(29, 40)
+                };
+            }
+
             var teeMarker = new google.maps.Marker({
                 position: pinLatLons[i].latLng,
                 map: map,
-                title: pinLatLons[i].name
+                title: pinLatLons[i].name,
+                icon: icon
             });
             pointCount++; //Add counter to indicate whether we need to reset the zoom.
             var thisLatLng = new google.maps.LatLng(pinLatLons[i].latLng.lat,pinLatLons[i].latLng.lng);
@@ -126,6 +154,13 @@ function addPlayer(){
     var p4Cap = document.getElementById("p4Cap").value;
     var p4Tees = document.getElementById("p4Tees").value;
 
+    //TODO: add functionality for editing players instead of creating new ones. This is actually fairly complex.
+
+    if (players.length !== 0) {
+        alert("You've already created players. Functionality to add players or edit existing ones is coming soon!")
+        return;
+    }
+
     if (p1Name !== "") {
         Player1 = new Player(p1Name,p1Cap,p1Tees);
         addPlayerToScorecard(Player1);
@@ -154,8 +189,6 @@ function addPlayer(){
         parent.innerHTML += '<select class="form-control" id="'+players[i].name+'Select">' +
                 '<option>1</option><option>2</option><option>3</option><option>4</option>'+
                 '<option>5</option><option>6</option><option>7</option><option>8</option>';
-        //TODO: Add an inline selector that will allow for entering putts. Will require restructuring score object.
-
     }
 
 }
@@ -183,17 +216,20 @@ function startRound() {
         return;
     }
 
-    var parent = document.getElementById("golfScoreCard");
+    var parent = document.getElementById("mapContainer");
     var child = document.getElementById("start");
     var myHole = hole+1;
     document.getElementById("scoreModalHead").innerHTML = "Enter score for hole " + myHole;
     parent.removeChild(child);
-    child = document.getElementById("players");
+    child = document.getElementById("addPlayer");
     parent.removeChild(child);
+    child = document.getElementById("startRound");
+    parent.removeChild(child);
+    document.getElementById("mapContainer").style.paddingBottom = "75%"; //resize map to stay consistent.
     var holeLatLon = model.course.holes[hole].green_location, pinLatLons = getPinLoc();
     var centerLatLon = centerMap(holeLatLon, pinLatLons);
-    parent.innerHTML += "<button class='btn btn-info btn-lg' id='nextHole' onclick='nextHole()'>Next Hole</button>";
-    parent.innerHTML += "<button class='btn btn-info btn-lg' id='enterScore' data-toggle='modal' data-target='#addScoreModal'>Enter Score</button>";
+    parent.innerHTML += "<button class='myBtn btn btn-info btn-lg' id='nextHole' onclick='nextHole()'>Next Hole</button>";
+    parent.innerHTML += "<button class='myBtn btn btn-info btn-lg' id='enterScore' data-toggle='modal' data-target='#addScoreModal'>Enter Score</button>";
     initMap(centerLatLon, holeLatLon, pinLatLons);
 }
 
@@ -222,18 +258,37 @@ function enterScore(){
         //Enters score into the player object.
         var id = players[i].name+"Select";
         var score = document.getElementById(id).value;
-        var thisHole = hole+1;
+        var thisHole = hole + 1, f9Score = 0, b9Score = 0, totalScore = 0;
         players[i].score[thisHole] = score;
         //Enters the score into the scorecard.
         id = players[i].name+"Hole"+thisHole;
         document.getElementById(id).innerHTML = score;
+        //Creates totals for the front9 & back9, and adds those to the scorecard.
+        var myKeys = Object.keys(players[i].score);
+        for (var j = 0; j<myKeys.length; j++) {
+            if (myKeys[j] <= 9) {
+                f9Score += +players[i].score[myKeys[j]];
+            } else {
+                b9Score += +players[i].score[myKeys[j]];
+            }
+        }
+        totalScore = f9Score + b9Score;
+        id = players[i].name+'f9Total';
+        document.getElementById(id).innerHTML = f9Score;
+        id = players[i].name+'b9TotalForf9Table';
+        document.getElementById(id).innerHTML = b9Score;
+        id = players[i].name+'f9GrandTotal';
+        document.getElementById(id).innerHTML = totalScore;
+        id = players[i].name+'f9TotalForb9Table';
+        document.getElementById(id).innerHTML = f9Score;
+        id = players[i].name+'b9Total';
+        document.getElementById(id).innerHTML = b9Score;
+        id = players[i].name+'b9GrandTotal';
+        document.getElementById(id).innerHTML = totalScore;
     }
-
-
 }
 
 function scoreInit() {
-//    TODO: This should create the scorecard div.
     var f9 = document.getElementById("frontNine");
     var b9 = document.getElementById("backNine");
     var f9Yards = 0, b9Yards = 0, f9yardageArr = [], b9yardageArr = [];
@@ -241,6 +296,16 @@ function scoreInit() {
     //Grab tee colors, put into array. will use this for the pins as well, so I want them easily accessible.
     for (var i = 0; i < (model.course.holes[0].tee_boxes.length-1); i++) {
         tees.push(model.course.holes[0].tee_boxes[i].tee_color_type);
+    }
+
+    //Creates the tee options for the user to pick from when adding players.
+    for (i = 0; i<tees.length; i++) {
+        var thisTee = tees[i];
+        thisTee = thisTee.charAt(0).toUpperCase() + thisTee.slice(1);
+        document.getElementById("p1Tees").innerHTML += '<option>' + thisTee + '</option>';
+        document.getElementById("p2Tees").innerHTML += '<option>' + thisTee + '</option>';
+        document.getElementById("p3Tees").innerHTML += '<option>' + thisTee + '</option>';
+        document.getElementById("p4Tees").innerHTML += '<option>' + thisTee + '</option>';
     }
 
     //Now that I have the tee colors, I need to add each tee's yardage to the scorecard.
@@ -288,6 +353,8 @@ function scoreInit() {
         myId = "b9grandTotal" + tees[i];
         document.getElementById(myId).innerHTML = b9yardageArr[i]+f9yardageArr[i];
     }
+
+    //TODO: add par for each hole.
 }
 
 //Adds the appropriate rows for the player object to the scorecard. There's probably an easier way to do this, but this works.
@@ -324,8 +391,9 @@ function addPlayerToScorecard(pObj) {
 
 //Opens the scoresheet, closes the map.
 function openScore() {
-    document.getElementById("map").style.display = "none";
+    document.getElementById("mapContainer").style.display = "none";
     document.getElementById("f9Div").style.display = "table";
+    document.getElementById("b9Div").style.display = "none";
 }
 
 //Switches the front9 scoresheet with the back9 scoresheet.
@@ -341,7 +409,7 @@ function scoreSwitch(target) {
 
 //Goes to the hole selected.
 function gotoHole(h) {
-    document.getElementById("map").style.display = "block";
+    document.getElementById("mapContainer").style.display = "block";
     document.getElementById("f9Div").style.display = "none";
     document.getElementById("b9Div").style.display = "none";
     hole = h-1;
@@ -365,5 +433,7 @@ function finish() {
     if (finished === false) {
         alert("WARNING! Not all scores have been entered.");
     }
-    openScore();
+    document.getElementById("mapContainer").style.display = "none";
+    document.getElementById("f9Div").style.display = "table";
+    document.getElementById("b9Div").style.display = "table";
 }
