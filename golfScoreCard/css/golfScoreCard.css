@@ -73,3 +73,7 @@ body {
 #scorecard {
     background-color: whitesmoke;
 }
+
+#holeInfo {
+    font-size: xx-large;
+}

@@ -216,6 +216,9 @@ function startRound() {
         return;
     }
 
+    //Places hole# & Yardage onto the hole info div.
+    holeInfo();
+
     var parent = document.getElementById("mapContainer");
     var child = document.getElementById("start");
     var myHole = hole+1;
@@ -233,6 +236,17 @@ function startRound() {
     initMap(centerLatLon, holeLatLon, pinLatLons);
 }
 
+//Places hole# & Yardage onto the hole Info div.
+function holeInfo(){
+    var yardage = 0;
+    for (var i = 0; i<model.course.holes[hole].tee_boxes.length-1; i++) {
+        if (players[0].tee_color.toLowerCase() == model.course.holes[hole].tee_boxes[i].tee_color_type.toLowerCase()) {
+            yardage = model.course.holes[hole].tee_boxes[i].yards;
+        }
+    }
+    document.getElementById("holeInfo").innerHTML = "Hole # " + (hole+1) + "; Yardage: " + yardage;
+}
+
 //Starts the next hole.
 function nextHole(){
     //.length statement takes you to scorecard if you've entered scores for all 18 holes.
@@ -241,6 +255,10 @@ function nextHole(){
         openScore();
     }
     hole++;
+
+    //Places hole# & Yardage onto the hole info div.
+    holeInfo();
+
     var myHole = hole+1; //hole is an array index, where index0 = hole 1.
     var holeLatLon = model.course.holes[hole].green_location;
     var pinLatLons = getPinLoc();
@@ -354,7 +372,16 @@ function scoreInit() {
         document.getElementById(myId).innerHTML = b9yardageArr[i]+f9yardageArr[i];
     }
 
-    //TODO: add par for each hole.
+    //TODO: Build in the par for each hole.
+
+    //front9 loop. This will build in par into the table.
+    //for (i = 0; i<=9; i++) {
+    //    tableText = "";
+    //    tableText += '<tr>';
+    //    tableText += '<td>Par</td>'
+    //    for (i = 0; i<)
+    //}
+
 }
 
 //Adds the appropriate rows for the player object to the scorecard. There's probably an easier way to do this, but this works.
