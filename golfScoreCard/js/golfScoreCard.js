@@ -309,7 +309,7 @@ function enterScore(){
 function scoreInit() {
     var f9 = document.getElementById("frontNine");
     var b9 = document.getElementById("backNine");
-    var f9Yards = 0, b9Yards = 0, f9yardageArr = [], b9yardageArr = [];
+    var f9Yards = 0, b9Yards = 0, f9yardageArr = [], b9yardageArr = [], totalPar = 0;
 
     //Grab tee colors, put into array. will use this for the pins as well, so I want them easily accessible.
     for (var i = 0; i < (model.course.holes[0].tee_boxes.length-1); i++) {
@@ -378,10 +378,32 @@ function scoreInit() {
     //for (i = 0; i<=9; i++) {
     //    tableText = "";
     //    tableText += '<tr>';
-    //    tableText += '<td>Par</td>'
-    //    for (i = 0; i<)
+    //    tableText += '<td>Par</td>';
+    //    for (i = 0; i<=9; i++) {
+    //        tableText += '<td>' + model.course.holes[i].tee_boxes[0].par + '</td>';
+    //        totalPar += model.course.holes[i].tee_boxes[0].par;
+    //    }
+    //    tableText += '<td>' + totalPar + '</td>';
+    //    tableText += '<td></td>';
+    //    tableText += '<td></td>';
+    //    tableText += '</tr>';
     //}
-
+    //
+    ////back9 loop.
+    //for (i=10; i<=18; i++) {
+    //    tableText = "";
+    //    tableText += '<tr>';
+    //    tableText += '<td>' + totalPar + '</td>';  //front9
+    //    totalPar = 0;
+    //    tableText += '<td>Par</td>';
+    //    for (i = 0; i<=9; i++) {
+    //        tableText += '<td>' + model.course.holes[i].tee_boxes[0].par + '</td>';
+    //        totalPar += model.course.holes[i].tee_boxes[0].par;
+    //    }
+    //    tableText += '<td>' + totalPar + '</td>';
+    //    tableText += '<td></td>'; // Grand total par.
+    //    tableText += '</tr>';
+    //}
 }
 
 //Adds the appropriate rows for the player object to the scorecard. There's probably an easier way to do this, but this works.
