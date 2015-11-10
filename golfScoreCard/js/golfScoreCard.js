@@ -73,7 +73,7 @@ function initMap(cLatLon, hLatLon, pinLatLons) {
             title: "Course"
         });
     } else {
-        var gHLatLon = new google.maps.LatLng(hLatLon.lat,hLatLon.lng); //I had to convert the object to google maps latlng for the fitbounds to work.
+        var gHLatLon = new google.maps.LatLng(hLatLon.lat, hLatLon.lng); //I had to convert the object to google maps latlng for the fitbounds to work.
         bounds.extend(gHLatLon);
         var hMarker = new google.maps.Marker({
             position: hLatLon,
@@ -107,7 +107,7 @@ function initMap(cLatLon, hLatLon, pinLatLons) {
                 icon: icon
             });
             pointCount++; //Add counter to indicate whether we need to reset the zoom.
-            var thisLatLng = new google.maps.LatLng(pinLatLons[i].latLng.lat,pinLatLons[i].latLng.lng);
+            var thisLatLng = new google.maps.LatLng(pinLatLons[i].latLng.lat, pinLatLons[i].latLng.lng);
             bounds.extend(thisLatLng); //Extend the bounds of the map.
         }
     }
@@ -121,7 +121,7 @@ function initMap(cLatLon, hLatLon, pinLatLons) {
 //grabs the pin locations.
 function getPinLoc() {
     var arr = [];
-    for (var i = 0; i < model.course.holes[hole].tee_boxes.length-1; i++) {
+    for (var i = 0; i < model.course.holes[hole].tee_boxes.length - 1; i++) {
         var myObj = {
             "latLng": model.course.holes[hole].tee_boxes[i].location,
             "name": model.course.holes[hole].tee_boxes[i].tee_color_type
@@ -140,7 +140,7 @@ function centerMap(hLatLon, pLatLons) {
 
 //Player creation section!
 //Player initializer
-function addPlayer(){
+function addPlayer() {
     var p1Name = document.getElementById("p1Name").value;
     var p1Cap = document.getElementById("p1Cap").value;
     var p1Tees = document.getElementById("p1Tees").value;
@@ -157,44 +157,44 @@ function addPlayer(){
     //TODO: add functionality for editing players instead of creating new ones. This is actually fairly complex.
 
     if (players.length !== 0) {
-        alert("You've already created players. Functionality to add players or edit existing ones is coming soon!")
+        alert("You've already created players. Functionality to add players or edit existing ones is coming soon!");
         return;
     }
 
     if (p1Name !== "") {
-        Player1 = new Player(p1Name,p1Cap,p1Tees);
+        Player1 = new Player(p1Name, p1Cap, p1Tees);
         addPlayerToScorecard(Player1);
         players.push(Player1);
     }
     if (p2Name !== "") {
-        Player2 = new Player(p2Name,p2Cap,p2Tees);
+        Player2 = new Player(p2Name, p2Cap, p2Tees);
         addPlayerToScorecard(Player2);
         players.push(Player2);
     }
     if (p3Name !== "") {
-        Player3 = new Player(p3Name,p3Cap,p3Tees);
+        Player3 = new Player(p3Name, p3Cap, p3Tees);
         addPlayerToScorecard(Player3);
         players.push(Player3);
     }
     if (p4Name !== "") {
-        Player4 = new Player(p4Name,p4Cap,p4Tees);
+        Player4 = new Player(p4Name, p4Cap, p4Tees);
         addPlayerToScorecard(Player4);
         players.push(Player4);
     }
 
     //This section builds the scoring modal.
     var parent = document.getElementById("playerScores");
-    for (var i = 0; i<players.length; i++) {
-        parent.innerHTML += '<div class="pScores" id="'+players[i].name+'">'+players[i].name+': </div>';
-        parent.innerHTML += '<select class="form-control" id="'+players[i].name+'Select">' +
-                '<option>1</option><option>2</option><option>3</option><option>4</option>'+
-                '<option>5</option><option>6</option><option>7</option><option>8</option>';
+    for (var i = 0; i < players.length; i++) {
+        parent.innerHTML += '<div class="pScores" id="' + players[i].name + '">' + players[i].name + ': </div>';
+        parent.innerHTML += '<select class="form-control" id="' + players[i].name + 'Select">' +
+            '<option>1</option><option>2</option><option>3</option><option>4</option>' +
+            '<option>5</option><option>6</option><option>7</option><option>8</option>';
     }
 
 }
 
 //Player object constructor.
-function Player(name,handi,tees) {
+function Player(name, handi, tees) {
     this.name = name;
     this.score = {};
     this.handicap = Number(handi);
@@ -221,7 +221,7 @@ function startRound() {
 
     var parent = document.getElementById("mapContainer");
     var child = document.getElementById("start");
-    var myHole = hole+1;
+    var myHole = hole + 1;
     document.getElementById("scoreModalHead").innerHTML = "Enter score for hole " + myHole;
     parent.removeChild(child);
     child = document.getElementById("addPlayer");
@@ -237,18 +237,18 @@ function startRound() {
 }
 
 //Places hole# & Yardage onto the hole Info div.
-function holeInfo(){
+function holeInfo() {
     var yardage = 0;
-    for (var i = 0; i<model.course.holes[hole].tee_boxes.length-1; i++) {
+    for (var i = 0; i < model.course.holes[hole].tee_boxes.length - 1; i++) {
         if (players[0].tee_color.toLowerCase() == model.course.holes[hole].tee_boxes[i].tee_color_type.toLowerCase()) {
             yardage = model.course.holes[hole].tee_boxes[i].yards;
         }
     }
-    document.getElementById("holeInfo").innerHTML = "Hole # " + (hole+1) + "; Yardage: " + yardage;
+    document.getElementById("holeInfo").innerHTML = "Hole # " + (hole + 1) + "; Yardage: " + yardage;
 }
 
 //Starts the next hole.
-function nextHole(){
+function nextHole() {
     //.length statement takes you to scorecard if you've entered scores for all 18 holes.
     //hole statement takes you to scorecard if you're currently on hole 18 (17, since it's an array index).
     if (Object.keys(players[0].score).length === 18 || hole === 17) {
@@ -259,7 +259,7 @@ function nextHole(){
     //Places hole# & Yardage onto the hole info div.
     holeInfo();
 
-    var myHole = hole+1; //hole is an array index, where index0 = hole 1.
+    var myHole = hole + 1; //hole is an array index, where index0 = hole 1.
     var holeLatLon = model.course.holes[hole].green_location;
     var pinLatLons = getPinLoc();
     var centerLatLon = centerMap(holeLatLon, pinLatLons);
@@ -268,22 +268,22 @@ function nextHole(){
 }
 
 //Enters scores for the players.
-function enterScore(){
+function enterScore() {
     //Need to grab the scores from the modal select (id: playerName+"Select").
     //Now I have the scores, so I need to add the scores to the player object's score object.
 
-    for (var i = 0; i<players.length; i++) {
+    for (var i = 0; i < players.length; i++) {
         //Enters score into the player object.
-        var id = players[i].name+"Select";
+        var id = players[i].name + "Select";
         var score = document.getElementById(id).value;
         var thisHole = hole + 1, f9Score = 0, b9Score = 0, totalScore = 0;
         players[i].score[thisHole] = score;
         //Enters the score into the scorecard.
-        id = players[i].name+"Hole"+thisHole;
+        id = players[i].name + "Hole" + thisHole;
         document.getElementById(id).innerHTML = score;
         //Creates totals for the front9 & back9, and adds those to the scorecard.
         var myKeys = Object.keys(players[i].score);
-        for (var j = 0; j<myKeys.length; j++) {
+        for (var j = 0; j < myKeys.length; j++) {
             if (myKeys[j] <= 9) {
                 f9Score += +players[i].score[myKeys[j]];
             } else {
@@ -291,17 +291,17 @@ function enterScore(){
             }
         }
         totalScore = f9Score + b9Score;
-        id = players[i].name+'f9Total';
+        id = players[i].name + 'f9Total';
         document.getElementById(id).innerHTML = f9Score;
-        id = players[i].name+'b9TotalForf9Table';
+        id = players[i].name + 'b9TotalForf9Table';
         document.getElementById(id).innerHTML = b9Score;
-        id = players[i].name+'f9GrandTotal';
+        id = players[i].name + 'f9GrandTotal';
         document.getElementById(id).innerHTML = totalScore;
-        id = players[i].name+'f9TotalForb9Table';
+        id = players[i].name + 'f9TotalForb9Table';
         document.getElementById(id).innerHTML = f9Score;
-        id = players[i].name+'b9Total';
+        id = players[i].name + 'b9Total';
         document.getElementById(id).innerHTML = b9Score;
-        id = players[i].name+'b9GrandTotal';
+        id = players[i].name + 'b9GrandTotal';
         document.getElementById(id).innerHTML = totalScore;
     }
 }
@@ -309,15 +309,15 @@ function enterScore(){
 function scoreInit() {
     var f9 = document.getElementById("frontNine");
     var b9 = document.getElementById("backNine");
-    var f9Yards = 0, b9Yards = 0, f9yardageArr = [], b9yardageArr = [], totalPar = 0;
+    var f9Yards = 0, b9Yards = 0, f9yardageArr = [], b9yardageArr = [], f9Par = 0, b9Par = 0;
 
     //Grab tee colors, put into array. will use this for the pins as well, so I want them easily accessible.
-    for (var i = 0; i < (model.course.holes[0].tee_boxes.length-1); i++) {
+    for (var i = 0; i < (model.course.holes[0].tee_boxes.length - 1); i++) {
         tees.push(model.course.holes[0].tee_boxes[i].tee_color_type);
     }
 
     //Creates the tee options for the user to pick from when adding players.
-    for (i = 0; i<tees.length; i++) {
+    for (i = 0; i < tees.length; i++) {
         var thisTee = tees[i];
         thisTee = thisTee.charAt(0).toUpperCase() + thisTee.slice(1);
         document.getElementById("p1Tees").innerHTML += '<option>' + thisTee + '</option>';
@@ -326,16 +326,18 @@ function scoreInit() {
         document.getElementById("p4Tees").innerHTML += '<option>' + thisTee + '</option>';
     }
 
+    //TODO: Build a 'scorecard builder' function that will do this. Seems like I repeat the same basic code multiple times..
+
     //Now that I have the tee colors, I need to add each tee's yardage to the scorecard.
     //Front9 loop. Figuring out how to create unique ID's takes thought.
-    for (i = 0; i<tees.length; i++) {
+    for (i = 0; i < tees.length; i++) {
         var tableText = "";
         f9Yards = 0;
         tableText += '<tr id="' + tees[i] + '">';
-        tableText += '<td>' + tees[i] + '</td>';
-        for (var j = 1; j<=9; j++) {
-            tableText += '<td>' + model.course.holes[j-1].tee_boxes[i].yards + '</td>';
-            f9Yards += model.course.holes[j-1].tee_boxes[i].yards;
+        tableText += '<td class="rowHead">' + tees[i] + '</td>';
+        for (var j = 1; j <= 9; j++) {
+            tableText += '<td>' + model.course.holes[j - 1].tee_boxes[i].yards + '</td>';
+            f9Yards += model.course.holes[j - 1].tee_boxes[i].yards;
         }
         tableText += '<td id="' + tees[i] + 'f9YardsTotal">' + f9Yards + '</td>';
         tableText += '<td id="b9Total' + tees[i] + '"></td>';
@@ -345,15 +347,15 @@ function scoreInit() {
         f9yardageArr.push(f9Yards);
     }
     //Back9 loop.
-    for (i = 0; i<tees.length; i++) {
+    for (i = 0; i < tees.length; i++) {
         tableText = "";
         b9Yards = 0;
         tableText += '<tr id="' + tees[i] + '">';
         tableText += '<td id="' + tees[i] + 'f9Total">' + f9yardageArr[i] + '</td>';
-        tableText += '<td>' + tees[i] + '</td>';
-        for (j = 10; j<=18; j++) {
-            tableText += '<td>' + model.course.holes[j-1].tee_boxes[i].yards + '</td>';
-            b9Yards += model.course.holes[j-1].tee_boxes[i].yards;
+        tableText += '<td class="rowHead">' + tees[i] + '</td>';
+        for (j = 10; j <= 18; j++) {
+            tableText += '<td>' + model.course.holes[j - 1].tee_boxes[i].yards + '</td>';
+            b9Yards += model.course.holes[j - 1].tee_boxes[i].yards;
         }
         tableText += '<td>' + b9Yards + '</td>';
         tableText += '<td id="b9grandTotal' + tees[i] + '"></td>';
@@ -363,47 +365,44 @@ function scoreInit() {
     }
 
     //This loops through and adds some totals to the page.
-    for (i = 0; i<b9yardageArr.length; i++) {
-        var myId = "b9Total"+tees[i];
+    for (i = 0; i < b9yardageArr.length; i++) {
+        var myId = "b9Total" + tees[i];
         document.getElementById(myId).innerHTML = b9yardageArr[i];
         myId = "f9grandTotal" + tees[i];
-        document.getElementById(myId).innerHTML = b9yardageArr[i]+f9yardageArr[i];
+        document.getElementById(myId).innerHTML = b9yardageArr[i] + f9yardageArr[i];
         myId = "b9grandTotal" + tees[i];
-        document.getElementById(myId).innerHTML = b9yardageArr[i]+f9yardageArr[i];
+        document.getElementById(myId).innerHTML = b9yardageArr[i] + f9yardageArr[i];
     }
 
-    //TODO: Build in the par for each hole.
-
     //front9 loop. This will build in par into the table.
-    //for (i = 0; i<=9; i++) {
-    //    tableText = "";
-    //    tableText += '<tr>';
-    //    tableText += '<td>Par</td>';
-    //    for (i = 0; i<=9; i++) {
-    //        tableText += '<td>' + model.course.holes[i].tee_boxes[0].par + '</td>';
-    //        totalPar += model.course.holes[i].tee_boxes[0].par;
-    //    }
-    //    tableText += '<td>' + totalPar + '</td>';
-    //    tableText += '<td></td>';
-    //    tableText += '<td></td>';
-    //    tableText += '</tr>';
-    //}
-    //
-    ////back9 loop.
-    //for (i=10; i<=18; i++) {
-    //    tableText = "";
-    //    tableText += '<tr>';
-    //    tableText += '<td>' + totalPar + '</td>';  //front9
-    //    totalPar = 0;
-    //    tableText += '<td>Par</td>';
-    //    for (i = 0; i<=9; i++) {
-    //        tableText += '<td>' + model.course.holes[i].tee_boxes[0].par + '</td>';
-    //        totalPar += model.course.holes[i].tee_boxes[0].par;
-    //    }
-    //    tableText += '<td>' + totalPar + '</td>';
-    //    tableText += '<td></td>'; // Grand total par.
-    //    tableText += '</tr>';
-    //}
+    tableText = "";
+    tableText += '<tr>';
+    tableText += '<td class="rowHead">Par</td>';
+    for (i = 0; i < 9; i++) {
+        tableText += '<td>' + model.course.holes[i].tee_boxes[0].par + '</td>';
+        f9Par += model.course.holes[i].tee_boxes[0].par;
+    }
+    tableText += '<td>' + f9Par + '</td>';
+    tableText += '<td id="b9TotalParForf9"></td>';
+    tableText += '<td id="f9GrandTotalPar"></td>';
+    tableText += '</tr>';
+    f9.innerHTML += tableText;
+
+    //back9 loop.
+    tableText = "";
+    tableText += '<tr>';
+    tableText += '<td>' + f9Par + '</td>';
+    tableText += '<td class="rowHead">Par</td>';
+    for (i = 9; i < 18; i++) {
+        tableText += '<td>' + model.course.holes[i].tee_boxes[0].par + '</td>';
+        b9Par += model.course.holes[i].tee_boxes[0].par;
+    }
+    tableText += '<td>' + b9Par + '</td>';
+    tableText += '<td>' + (f9Par + b9Par) + '</td>';
+    tableText += '</tr>';
+    b9.innerHTML += tableText;
+    document.getElementById("b9TotalParForf9").innerHTML = b9Par;
+    document.getElementById("f9GrandTotalPar").innerHTML = (b9Par + f9Par);
 }
 
 //Adds the appropriate rows for the player object to the scorecard. There's probably an easier way to do this, but this works.
@@ -413,9 +412,9 @@ function addPlayerToScorecard(pObj) {
     //Front9
     var text = "";
     text += '<tr id="' + pObj.name + 'f9ScoreRow">';
-    text += '<td>' + pObj.name + '</td>';
+    text += '<td class="rowHead">' + pObj.name + '</td>';
     //need ID's on the individual hole scores so I can input values there. Hooray.
-    for (var i = 1; i<=9; i++) {
+    for (var i = 1; i <= 9; i++) {
         text += '<td id="' + pObj.name + 'Hole' + i + '"></td>';
     }
     text += '<td id="' + pObj.name + 'f9Total"></td>';
@@ -427,9 +426,9 @@ function addPlayerToScorecard(pObj) {
     text = "";
     text += '<tr id="' + pObj.name + 'b9ScoreRow">';
     text += '<td id="' + pObj.name + 'f9TotalForb9Table"></td>';
-    text += '<td>' + pObj.name + '</td>';
+    text += '<td class="rowHead">' + pObj.name + '</td>';
     //need ID's on the individual hole scores so I can input values there. i == 9, so have to change value.
-    for (i = 10; i<=18; i++) {
+    for (i = 10; i <= 18; i++) {
         text += '<td id="' + pObj.name + 'Hole' + i + '"></td>';
     }
     text += '<td id="' + pObj.name + 'b9Total"></td>';
@@ -461,8 +460,8 @@ function gotoHole(h) {
     document.getElementById("mapContainer").style.display = "block";
     document.getElementById("f9Div").style.display = "none";
     document.getElementById("b9Div").style.display = "none";
-    hole = h-1;
-    var myHole = hole+1; //hole is an array index, where index0 = hole 1.
+    hole = h - 1;
+    var myHole = hole + 1; //hole is an array index, where index0 = hole 1.
     var holeLatLon = model.course.holes[hole].green_location;
     var pinLatLons = getPinLoc();
     var centerLatLon = centerMap(holeLatLon, pinLatLons);
@@ -473,7 +472,7 @@ function gotoHole(h) {
 //Finishes the round.
 function finish() {
     var finished = true;
-    for (var i = 0; i<players.length; i++) {
+    for (var i = 0; i < players.length; i++) {
         if (Object.keys(players[i].score).length < 18) {
             finished = false;
         }

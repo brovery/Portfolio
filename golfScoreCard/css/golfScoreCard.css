@@ -77,3 +77,7 @@ body {
 #holeInfo {
     font-size: xx-large;
 }
+
+.rowHead {
+    font-weight: bold;
+}
