@@ -1,28 +1,42 @@
-/**
- * Created by brandon_overy on 11/9/15.
- */
-var canvas,
+// NEW: 1. WindowSetup function and call from main. ADD TO THE GLOBAL VARS AND ADD GAME STATE
+// 2. Width and height are now pulling from the global var (in canvasSetup).
+// 3. Load Graphics is updated and is now putting info into our fishsprite.js
+// 4. Add gameLoop function, update function, and render function.
+// 5. Add the massive Fish object function.
+// 6. Add the onpress function because it is being referenced.
+// Pretty much this is the original code minus the coral being added.
+
+// keep in mind that I have all calls and references to corals commented out for the time being. For now this should just animate the fish and begin the in game state so that you can make the fish jump.
+// Also note that the fish is being drawn in the update function that refreshes constantly. that is how we are scrolling the animation.
+
+// Global state
+var
+    canvas,
     renderingContext,
     width,
     height,
-    floppyDude,
-    startButton,
-    clickText = "Click To Start",
     foregroundPosition = 0,
-    frames = 0,
+    frames = 0, // Counts the number of frames rendered.
+
+// The playable fish character
+    fish,
+//corals,
+    gameStarted,
+// State vars
     currentState,
+
+// Our game has three states: the splash screen, gameplay, and the score display.
     states = {
         Splash: 0,
         Game: 1,
         Score: 2
     };
 
-function main() {
-    canvasSetup();
-    document.body.appendChild(canvas);
-    loadGraphics();
-}
 
+/**
+ * Fish class. Creates instances of Fish.
+ * @constructor
+ */
 function Fish() {
     this.x = 140;
     this.y = 0;
@@ -48,7 +62,7 @@ function Fish() {
      * Update sprite animation and position of Fish
      */
     this.update = function () {
-// Play animation twice as fast during game state
+        // Play animation twice as fast during game state
         var n = currentState === states.Splash ? 10 : 5;
 
         this.frame += frames % n === 0 ? 1 : 0;
@@ -76,7 +90,7 @@ function Fish() {
         this.velocity += this.gravity;
         this.y += this.velocity;
 
-// Change to the score state when fish touches the ground
+        // Change to the score state when fish touches the ground
         if (this.y >= height - foregroundSprite.height - 10) {
             this.y = height - foregroundSprite.height - 10;
 
@@ -87,7 +101,7 @@ function Fish() {
             this.velocity = this._jump; // Set velocity to jump speed for correct rotation
         }
 
-// When fish lacks upward momentum increment the rotation angle
+        // When fish lacks upward momentum increment the rotation angle
         if (this.velocity >= this._jump) {
             this.frame = 1;
             this.rotation = Math.min(Math.PI / 2, this.rotation + 0.3);
@@ -98,49 +112,65 @@ function Fish() {
 
     /**
      * Draws Fish to canvas renderingContext
-     * @param {CanvasRenderingContext2D} renderingContext the context used for drawing
+     * @param  {CanvasRenderingContext2D} renderingContext the context used for drawing
      */
     this.draw = function (renderingContext) {
         renderingContext.save();
 
-// translate and rotate renderingContext coordinate system
+        // translate and rotate renderingContext coordinate system
         renderingContext.translate(this.x, this.y);
         renderingContext.rotate(this.rotation);
 
         var n = this.animation[this.frame];
 
-// draws the fish with center in origo
+        // draws the fish with center in origo
         fishSprite[n].draw(renderingContext, -fishSprite[n].width / 2, -fishSprite[n].height / 2);
 
         renderingContext.restore();
     };
 }
 
-function onPress(evt) {
+/**
+ * Called on mouse or touch press. Update and change state depending on current game state.
+ * @param  {MouseEvent/TouchEvent} evt - the onpress event
+ */
+function onpress(evt) {
+    gameStarted = true;
     switch (currentState) {
-        case state.Splash: // Start the game and update the fish velocity
-            currentState = state.Game;
+
+        case states.Splash: // Start the game and update the fish velocity.
+            currentState = states.Game;
             fish.jump();
             break;
-        case state.Game: // Game is in progress. Update velocity
+
+        case states.Game: // The game is in progress. Update fish velocity.
             fish.jump();
             break;
-        case state.Score: //fish is dead, scores show up. Now switch back to splash screen.
-            //get even location.
+
+        case states.Score: // Change from score to splash state if event within okButton bounding box
+            // Get event position
             var mouseX = evt.offsetX, mouseY = evt.offsetY;
-            if(mouseX == null || mouseY == null) {
+
+            if (mouseX == null || mouseY == null) {
                 mouseX = evt.touches[0].clientX;
                 mouseY = evt.touches[0].clientY;
             }
-            //check if hit button
-            if(okButton.x < mouseX && mouseX < okButton.width && okButton.y < mouseY && mouseY < okButton.height) {
-                currentState = state.Splash;
+
+            // Check if within the okButton
+            if (okButton.x < mouseX && mouseX < okButton.x + okButton.width &&
+                okButton.y < mouseY && mouseY < okButton.y + okButton.height
+            ) {
+                //corals.reset();
+                currentState = states.Splash;
+                score = 0;
             }
             break;
     }
 }
 
-//define sizes with screen size.
+/**
+ * Sets the canvas dimensions based on the window dimensions and registers the event handler.
+ */
 function windowSetup() {
     // Retrieve the width and height of the window
     width = window.innerWidth;
@@ -158,48 +188,68 @@ function windowSetup() {
     document.addEventListener(inputEvent, onpress);
 }
 
+/**
+ * Creates the canvas.
+ */
 function canvasSetup() {
     canvas = document.createElement("canvas");
-    //Some styles will not work with canvas, so be careful with what you do here.
-    canvas.style.border = "1px solid #CCC";
+    canvas.style.border = "15px solid #382b1d";
 
-    //set html width & height properties
     canvas.width = width;
     canvas.height = height;
-    //set renderingContext, which will now control the Canvas.
+
     renderingContext = canvas.getContext("2d");
 }
 
-
 function loadGraphics() {
+    // Initiate graphics and ok button
     var img = new Image();
     img.src = "images/sheet.png";
-    img.onload = function() {
+    img.onload = function () {
         initSprites(this);
         renderingContext.fillStyle = backgroundSprite.color;
 
-        //renderingContext.fillRect(0, 0, 600, 400);
-        //
-        //renderingContext.fillStyle = "#151515";
-        //renderingContext.font = "30px Arial";
-        //renderingContext.fillText(clickText,220,280);
-        //
-        //renderingContext.drawImage(floppyDude, 10, 10, 40, 40)
+        okButton = {
+            x: (width - okButtonSprite.width) / 2,
+            y: height - 200,
+            width: okButtonSprite.width,
+            height: okButtonSprite.height
+        };
+        gameLoop();
     };
-    gameLoop();
-    //startButton = new Image();
-    //startButton.src = "images/start.png";
-    //startButton.onload = function() {
-    //    renderingContext.drawImage(startButton, 260, 300, 80, 80)
-    //}
 }
 
+/**
+ * Initiates the game.
+ */
+function main() {
+    windowSetup();
+    canvasSetup();
+
+    currentState = states.Splash; // Game begins at the splash screen.
+
+    document.body.appendChild(canvas); // Append the canvas we've created to the body element in our HTML document.
+
+    fish = new Fish();
+
+    //corals = new CoralCollection();
+
+    loadGraphics();
+}
+
+/**
+ * The game loop. Update and render all sprites before the window repaints.
+ */
 function gameLoop() {
     update();
     render();
     window.requestAnimationFrame(gameLoop);
+    //console.log('swim');
 }
 
+/**
+ * Updates all moving sprites: foreground, fish, and corals
+ */
 function update() {
     frames++;
 
@@ -214,6 +264,9 @@ function update() {
     fish.update();
 }
 
+/**
+ * Re-draw the game view.
+ */
 function render() {
     // Draw background color
     renderingContext.fillRect(0, 0, width, height);
@@ -228,4 +281,21 @@ function render() {
     // Draw foreground sprites
     foregroundSprite.draw(renderingContext, foregroundPosition, height - foregroundSprite.height);
     foregroundSprite.draw(renderingContext, foregroundPosition + foregroundSprite.width, height - foregroundSprite.height);
+
+    //draw splash screen stuff
+    if(!gameStarted) {
+        splash();
+    }
 }
+
+function splash() {
+    renderingContext.fillStyle = "white";
+    renderingContext.font = "30px Arial";
+    renderingContext.fillText("Click button to start", 50, 320);
+
+    okButtonSprite.draw(renderingContext, 150, 350);
+
+    renderingContext.fillStyle = backgroundSprite.color;
+}
+
+
