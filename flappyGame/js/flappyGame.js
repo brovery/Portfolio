@@ -16,12 +16,13 @@ var
     width,
     height,
     foregroundPosition = 0,
+    gameScore = 0,
     frames = 0, // Counts the number of frames rendered.
 
 // The playable fish character
     fish,
-//corals,
-    gameStarted,
+    corals,
+
 // State vars
     currentState,
 
@@ -101,6 +102,16 @@ function Fish() {
             this.velocity = this._jump; // Set velocity to jump speed for correct rotation
         }
 
+        if (this.y <= 0) {
+
+
+            if (currentState === states.Game) {
+                currentState = states.Score;
+            }
+
+            this.velocity = this._jump; // Set velocity to jump speed for correct rotation
+        }
+
         // When fish lacks upward momentum increment the rotation angle
         if (this.velocity >= this._jump) {
             this.frame = 1;
@@ -139,8 +150,22 @@ function onpress(evt) {
     switch (currentState) {
 
         case states.Splash: // Start the game and update the fish velocity.
-            currentState = states.Game;
-            fish.jump();
+
+            // Get event position
+            var mouseX = evt.offsetX, mouseY = evt.offsetY;
+
+            if (mouseX == null || mouseY == null) {
+                mouseX = evt.touches[0].clientX;
+                mouseY = evt.touches[0].clientY;
+            }
+
+            // Check if click happens within the Start button.
+            if (startButton.x < mouseX && mouseX < startButton.x + startButton.width &&
+                startButton.y < mouseY && mouseY < startButton.y + startButton.height
+            ) {
+                currentState = states.Game;
+                fish.jump();
+            }
             break;
 
         case states.Game: // The game is in progress. Update fish velocity.
@@ -149,7 +174,7 @@ function onpress(evt) {
 
         case states.Score: // Change from score to splash state if event within okButton bounding box
             // Get event position
-            var mouseX = evt.offsetX, mouseY = evt.offsetY;
+            mouseX = evt.offsetX; mouseY = evt.offsetY;
 
             if (mouseX == null || mouseY == null) {
                 mouseX = evt.touches[0].clientX;
@@ -160,9 +185,9 @@ function onpress(evt) {
             if (okButton.x < mouseX && mouseX < okButton.x + okButton.width &&
                 okButton.y < mouseY && mouseY < okButton.y + okButton.height
             ) {
-                //corals.reset();
+                corals.reset();
                 currentState = states.Splash;
-                score = 0;
+                gameScore = 0;
             }
             break;
     }
@@ -215,6 +240,13 @@ function loadGraphics() {
             width: okButtonSprite.width,
             height: okButtonSprite.height
         };
+
+        startButton = {
+            x: (width - startButtonSprite.width) / 2,
+            y: height - 60,
+            width: startButtonSprite.width,
+            height: startButtonSprite.height
+        };
         gameLoop();
     };
 }
@@ -232,7 +264,7 @@ function main() {
 
     fish = new Fish();
 
-    //corals = new CoralCollection();
+    corals = new CoralCollection();
 
     loadGraphics();
 }
@@ -254,11 +286,11 @@ function update() {
     frames++;
 
     if (currentState !== states.Score) {
-        foregroundPosition = (foregroundPosition - 2) % 14; // Move left two px each frame. Wrap every 14px.
+        foregroundPosition = (foregroundPosition - 2) % 14; // 14 should change to the width of canvas, if you change it.
     }
 
     if (currentState === states.Game) {
-        //corals.update();
+        corals.update();
     }
 
     fish.update();
@@ -275,7 +307,7 @@ function render() {
     backgroundSprite.draw(renderingContext, 0, height - backgroundSprite.height);
     backgroundSprite.draw(renderingContext, backgroundSprite.width, height - backgroundSprite.height);
 
-    //corals.draw(renderingContext);
+    corals.draw(renderingContext);
     fish.draw(renderingContext);
 
     // Draw foreground sprites
@@ -283,9 +315,24 @@ function render() {
     foregroundSprite.draw(renderingContext, foregroundPosition + foregroundSprite.width, height - foregroundSprite.height);
 
     //draw splash screen stuff
-    if(!gameStarted) {
+    if(currentState == states.Splash) {
         splash();
     }
+
+    //draw the OK button & the score
+    if(currentState == states.Score) {
+        showScore();
+    }
+}
+
+function showScore() {
+    okButtonSprite.draw(renderingContext, ((width - okButtonSprite.width) / 2), (height - 214));
+
+    renderingContext.fillStyle = "white";
+    renderingContext.font = "30px Arial";
+    renderingContext.fillText("You killed Dan! Score: ", 50, 100);
+    renderingContext.fillText(gameScore, (width-20)/2, 150);
+    renderingContext.fillStyle = backgroundSprite.color;
 }
 
 function splash() {
@@ -293,9 +340,99 @@ function splash() {
     renderingContext.font = "30px Arial";
     renderingContext.fillText("Click button to start", 50, 320);
 
-    okButtonSprite.draw(renderingContext, 150, 350);
+    startButtonSprite.draw(renderingContext, 150, 350);
 
     renderingContext.fillStyle = backgroundSprite.color;
 }
 
+function CoralCollection() {
+    this._corals = [];
 
+    /**
+     * Empty corals array
+     */
+    this.reset = function () {
+        this._corals = [];
+    };
+
+    /**
+     * Creates and adds a new Coral to the game.
+     */
+    this.add = function () {
+        this._corals.push(new Coral()); // Create and push coral to array
+    };
+
+    /**
+     * Update the position of existing corals and add new corals when necessary.
+     */
+    this.update = function () {
+        if (frames % 100 === 0) { // Add a new coral to the game every 100 frames.
+            this.add();
+        }
+
+        for (var i = 0, len = this._corals.length; i < len; i++) { // Iterate through the array of corals and update each.
+            var coral = this._corals[i]; // The current coral.
+
+            if (i === 0) { // If this is the leftmost coral, it is the only coral that the fish can collide with . . .
+                coral.detectCollision(); // . . . so, determine if the fish has collided with this leftmost coral.
+                //gameScore++; //add 1 to the score.
+            }
+
+            coral.x -= 2; // Each frame, move each coral two pixels to the left. Higher/lower values change the movement speed.
+            if (coral.x < -coral.width) { // If the coral has moved off screen . . .
+                gameScore++;
+                this._corals.splice(i, 1); // . . . remove it.
+                i--;
+                len--;
+            }
+        }
+    };
+
+    /**
+     * Draw all corals to canvas context.
+     */
+    this.draw = function () {
+        for (var i = 0, len = this._corals.length; i < len; i++) {
+            var coral = this._corals[i];
+            coral.draw();
+        }
+    };
+}
+
+/**
+ * The Coral class. Creates instances of Coral.
+ */
+function Coral() {
+    this.x = 500;
+    this.y = height - (bottomCoralSprite.height + foregroundSprite.height + 120 + 200 * Math.random());
+    this.width = bottomCoralSprite.width;
+    this.height = bottomCoralSprite.height;
+
+    /**
+     * Determines if the fish has collided with the Coral.
+     * Calculates x/y difference and use normal vector length calculation to determine
+     */
+    this.detectCollision = function () {
+// intersection
+        var cx = Math.min(Math.max(fish.x, this.x), this.x + this.width);
+        var cy1 = Math.min(Math.max(fish.y, this.y), this.y + this.height);
+        var cy2 = Math.min(Math.max(fish.y, this.y + this.height + 80), this.y + 2 * this.height + 80);
+// Closest difference
+        var dx = fish.x - cx;
+        var dy1 = fish.y - cy1;
+        var dy2 = fish.y - cy2;
+// Vector length
+        var d1 = dx * dx + dy1 * dy1;
+        var d2 = dx * dx + dy2 * dy2;
+        var r = fish.radius * fish.radius;
+// Determine intersection
+        if (r > d1 || r > d2) {
+            currentState = states.Score;
+        }
+    };
+
+    this.draw = function () {
+        bottomCoralSprite.draw(renderingContext, this.x, this.y);
+        topCoralSprite.draw(renderingContext, this.x, this.y + 80 + this.height);
+    }
+}

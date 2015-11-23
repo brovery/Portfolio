@@ -9,6 +9,7 @@ var
     scoreSprite,
     splashScreenSprite,
     okButtonSprite,
+    startButtonSprite,
     smallNumberSprite,
     largeNumberSprite;
 
@@ -69,5 +70,7 @@ function initSprites(img) {
 
     scoreSprite = new Sprite(img, 138, 56, 113, 58);
     splashScreenSprite = new Sprite(img, 0, 114, 59, 49);
+
+    startButtonSprite = new Sprite(img, 80, 172, 34, 34)
 
 }
