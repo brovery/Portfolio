@@ -17,6 +17,7 @@ var
     height,
     foregroundPosition = 0,
     gameScore = 0,
+    coralDistance = 100,
     frames = 0, // Counts the number of frames rendered.
 
 // The playable fish character
@@ -291,6 +292,8 @@ function update() {
 
     if (currentState === states.Game) {
         corals.update();
+
+
     }
 
     fish.update();
@@ -309,6 +312,10 @@ function render() {
 
     corals.draw(renderingContext);
     fish.draw(renderingContext);
+    // Draw score on page during game.
+    if (currentState == states.Game) {
+        drawScore();
+    }
 
     // Draw foreground sprites
     foregroundSprite.draw(renderingContext, foregroundPosition, height - foregroundSprite.height);
@@ -325,13 +332,25 @@ function render() {
     }
 }
 
+function drawScore() {
+
+    renderingContext.save();
+
+    renderingContext.fillStyle = "white";
+    renderingContext.font = "30px Arial";
+    renderingContext.fillText("Score: " + gameScore, 10, 40);
+    renderingContext.fillStyle = backgroundSprite.color;
+
+    renderingContext.restore();
+}
+
 function showScore() {
     okButtonSprite.draw(renderingContext, ((width - okButtonSprite.width) / 2), (height - 214));
 
     renderingContext.fillStyle = "white";
     renderingContext.font = "30px Arial";
-    renderingContext.fillText("You killed Dan! Score: ", 50, 100);
-    renderingContext.fillText(gameScore, (width-20)/2, 150);
+    renderingContext.fillText("You killed Dan!", 80, 100);
+    renderingContext.fillText("Score: " + gameScore, 120, 150);
     renderingContext.fillStyle = backgroundSprite.color;
 }
 
@@ -366,6 +385,7 @@ function CoralCollection() {
      * Update the position of existing corals and add new corals when necessary.
      */
     this.update = function () {
+
         if (frames % 100 === 0) { // Add a new coral to the game every 100 frames.
             this.add();
         }
@@ -375,15 +395,17 @@ function CoralCollection() {
 
             if (i === 0) { // If this is the leftmost coral, it is the only coral that the fish can collide with . . .
                 coral.detectCollision(); // . . . so, determine if the fish has collided with this leftmost coral.
-                //gameScore++; //add 1 to the score.
             }
 
             coral.x -= 2; // Each frame, move each coral two pixels to the left. Higher/lower values change the movement speed.
             if (coral.x < -coral.width) { // If the coral has moved off screen . . .
-                gameScore++;
+                //gameScore++;
                 this._corals.splice(i, 1); // . . . remove it.
                 i--;
                 len--;
+            }
+            if ((coral.x + coral.width) == (fish.x-2)) {
+                gameScore++;
             }
         }
     };
@@ -403,6 +425,8 @@ function CoralCollection() {
  * The Coral class. Creates instances of Coral.
  */
 function Coral() {
+    var rand = Math.floor(Math.random() * (600 - 500 + 1)) + 500;
+    console.log(rand);
     this.x = 500;
     this.y = height - (bottomCoralSprite.height + foregroundSprite.height + 120 + 200 * Math.random());
     this.width = bottomCoralSprite.width;
