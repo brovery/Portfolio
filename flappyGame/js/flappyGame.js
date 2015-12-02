@@ -17,8 +17,9 @@ var
     height,
     foregroundPosition = 0,
     gameScore = 0,
-    coralDistance = 100,
+    highScore,
     frames = 0, // Counts the number of frames rendered.
+    difficulty = 1,
 
 // The playable fish character
     fish,
@@ -33,7 +34,6 @@ var
         Game: 1,
         Score: 2
     };
-
 
 /**
  * Fish class. Creates instances of Fish.
@@ -151,7 +151,6 @@ function onpress(evt) {
     switch (currentState) {
 
         case states.Splash: // Start the game and update the fish velocity.
-
             // Get event position
             var mouseX = evt.offsetX, mouseY = evt.offsetY;
 
@@ -164,6 +163,10 @@ function onpress(evt) {
             if (startButton.x < mouseX && mouseX < startButton.x + startButton.width &&
                 startButton.y < mouseY && mouseY < startButton.y + startButton.height
             ) {
+                getScore();
+                // hide the difficulty select div.
+                $('#container3').hide();
+                difficulty = $('#theDiff').val();
                 currentState = states.Game;
                 fish.jump();
             }
@@ -186,12 +189,24 @@ function onpress(evt) {
             if (okButton.x < mouseX && mouseX < okButton.x + okButton.width &&
                 okButton.y < mouseY && mouseY < okButton.y + okButton.height
             ) {
+                keepScore();
+                $('#container3').show();  // Show the level select div.
                 corals.reset();
                 currentState = states.Splash;
                 gameScore = 0;
             }
             break;
     }
+}
+
+function keepScore() {
+    if(gameScore > highScore) {
+        localStorage.highScore = gameScore;
+    }
+}
+
+function getScore() {
+    highScore = localStorage.highScore;
 }
 
 /**
@@ -277,7 +292,6 @@ function gameLoop() {
     update();
     render();
     window.requestAnimationFrame(gameLoop);
-    //console.log('swim');
 }
 
 /**
@@ -292,8 +306,6 @@ function update() {
 
     if (currentState === states.Game) {
         corals.update();
-
-
     }
 
     fish.update();
@@ -333,24 +345,21 @@ function render() {
 }
 
 function drawScore() {
-
     renderingContext.save();
-
     renderingContext.fillStyle = "white";
     renderingContext.font = "30px Arial";
     renderingContext.fillText("Score: " + gameScore, 10, 40);
     renderingContext.fillStyle = backgroundSprite.color;
-
     renderingContext.restore();
 }
 
 function showScore() {
     okButtonSprite.draw(renderingContext, ((width - okButtonSprite.width) / 2), (height - 214));
-
     renderingContext.fillStyle = "white";
     renderingContext.font = "30px Arial";
     renderingContext.fillText("You killed Dan!", 80, 100);
     renderingContext.fillText("Score: " + gameScore, 120, 150);
+    renderingContext.fillText("High Score: " + highScore, 120, 190);
     renderingContext.fillStyle = backgroundSprite.color;
 }
 
@@ -425,8 +434,8 @@ function CoralCollection() {
  * The Coral class. Creates instances of Coral.
  */
 function Coral() {
-    var rand = Math.floor(Math.random() * (600 - 500 + 1)) + 500;
-    console.log(rand);
+    var dist = (250 - difficulty*50);
+
     this.x = 500;
     this.y = height - (bottomCoralSprite.height + foregroundSprite.height + 120 + 200 * Math.random());
     this.width = bottomCoralSprite.width;
@@ -440,7 +449,7 @@ function Coral() {
 // intersection
         var cx = Math.min(Math.max(fish.x, this.x), this.x + this.width);
         var cy1 = Math.min(Math.max(fish.y, this.y), this.y + this.height);
-        var cy2 = Math.min(Math.max(fish.y, this.y + this.height + 80), this.y + 2 * this.height + 80);
+        var cy2 = Math.min(Math.max(fish.y, this.y + this.height + dist), this.y + 2 * this.height + dist);
 // Closest difference
         var dx = fish.x - cx;
         var dy1 = fish.y - cy1;
@@ -457,6 +466,6 @@ function Coral() {
 
     this.draw = function () {
         bottomCoralSprite.draw(renderingContext, this.x, this.y);
-        topCoralSprite.draw(renderingContext, this.x, this.y + 80 + this.height);
+        topCoralSprite.draw(renderingContext, this.x, this.y + dist + this.height);
     }
 }
