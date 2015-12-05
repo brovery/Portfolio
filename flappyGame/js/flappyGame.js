@@ -434,7 +434,7 @@ function CoralCollection() {
  * The Coral class. Creates instances of Coral.
  */
 function Coral() {
-    var dist = (250 - difficulty*50);
+    var dist = (180 - difficulty*30);
 
     this.x = 500;
     this.y = height - (bottomCoralSprite.height + foregroundSprite.height + 120 + 200 * Math.random());
