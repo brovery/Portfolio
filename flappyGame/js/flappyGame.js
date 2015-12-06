@@ -178,7 +178,8 @@ function onpress(evt) {
 
         case states.Score: // Change from score to splash state if event within okButton bounding box
             // Get event position
-            mouseX = evt.offsetX; mouseY = evt.offsetY;
+            mouseX = evt.offsetX;
+            mouseY = evt.offsetY;
 
             if (mouseX == null || mouseY == null) {
                 mouseX = evt.touches[0].clientX;
@@ -200,13 +201,18 @@ function onpress(evt) {
 }
 
 function keepScore() {
-    if(gameScore > highScore) {
+    if (gameScore > highScore) {
         localStorage.highScore = gameScore;
     }
 }
 
 function getScore() {
-    highScore = localStorage.highScore;
+    if (localStorage.highScore === undefined) {
+        highScore = 0;
+        localStorage.highScore = 0;
+    } else {
+        highScore = localStorage.highScore;
+    }
 }
 
 /**
@@ -245,7 +251,7 @@ function canvasSetup() {
 function loadGraphics() {
     // Initiate graphics and ok button
     var img = new Image();
-    img.src = "images/sheet.png";
+    img.src = "images/sheet2.png";
     img.onload = function () {
         initSprites(this);
         renderingContext.fillStyle = backgroundSprite.color;
@@ -334,12 +340,12 @@ function render() {
     foregroundSprite.draw(renderingContext, foregroundPosition + foregroundSprite.width, height - foregroundSprite.height);
 
     //draw splash screen stuff
-    if(currentState == states.Splash) {
+    if (currentState == states.Splash) {
         splash();
     }
 
     //draw the OK button & the score
-    if(currentState == states.Score) {
+    if (currentState == states.Score) {
         showScore();
     }
 }
@@ -413,7 +419,7 @@ function CoralCollection() {
                 i--;
                 len--;
             }
-            if ((coral.x + coral.width) == (fish.x-2)) {
+            if ((coral.x + coral.width) == (fish.x - 2)) {
                 gameScore++;
             }
         }
@@ -434,7 +440,7 @@ function CoralCollection() {
  * The Coral class. Creates instances of Coral.
  */
 function Coral() {
-    var dist = (250 - difficulty*50);
+    var dist = (175 - difficulty * 25);
 
     this.x = 500;
     this.y = height - (bottomCoralSprite.height + foregroundSprite.height + 120 + 200 * Math.random());
