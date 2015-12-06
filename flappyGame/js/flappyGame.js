@@ -363,7 +363,7 @@ function showScore() {
     okButtonSprite.draw(renderingContext, ((width - okButtonSprite.width) / 2), (height - 214));
     renderingContext.fillStyle = "white";
     renderingContext.font = "30px Arial";
-    renderingContext.fillText("You killed Dan!", 80, 100);
+    renderingContext.fillText("You killed Perry!", 80, 100);
     renderingContext.fillText("Score: " + gameScore, 120, 150);
     renderingContext.fillText("High Score: " + highScore, 120, 190);
     renderingContext.fillStyle = backgroundSprite.color;
