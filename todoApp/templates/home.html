@@ -1,6 +1,6 @@
 <div class="alert alert-success">
-    <h3>basicController as bc</h3>
-    <input type="text" ng-model="bc.sometext" />
-    <h4>bc.sometext: <span ng-bind="bc.sometext"></span></h4>
-    <button ng-click="bc.doSomething()">Clear</button>
+    <h3>Add a List</h3>
+    <p>Enter a list name, then click Add List to create a new list.</p><br>
+    <input type="text" ng-model="bc.listName" class="form-control"/><br>
+    <button ng-click="bc.addList()" class="btn btn-primary">Add List</button>
 </div>

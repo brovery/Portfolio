@@ -4,8 +4,7 @@
     angular.module('basicApp', [
         "ui.router",
         "navController",
-        "basicController",
-        "contactController"
+        "basicController"
     ])
 
     .config(["$stateProvider", "$urlRouterProvider",
@@ -21,11 +20,6 @@
                 .state("about", {
                     url: "/about",
                     templateUrl: "templates/about.html"
-                })
-                .state("contact", {
-                    url: "/contact",
-                    templateUrl: "templates/contact.html",
-                    controller: "contactController as cc"
                 });
 
             // if none of the above states are matched, use this as the fallback

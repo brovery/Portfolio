@@ -10,12 +10,15 @@
 
         // list everything
         var bc = this;
-        bc.sometext = 'default value';
-        bc.doSomething = doSomething;
+        var shoppingLists = [];
+        bc.listName = 'list name';
+        bc.addList = addList;
 
         // define functions
-        function doSomething() {
-            bc.sometext = '';
+        function addList() {
+            shoppingLists.push(bc.listName);
+            bc.listName = 'list name';
+            console.log(shoppingLists);
         }
     }
 

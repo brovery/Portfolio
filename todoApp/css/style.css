@@ -1,5 +1,4 @@
 h3 { margin-top: 0; }
 h4 { margin-top: 6px !important; }
 .top-margin { margin-top: 50px; }
-body, .alert, .container, [ui-view] { min-height: 100%; }
 input[type=text], button { border: black 1px solid; }
