@@ -1,8 +1,15 @@
-<div class="alert alert-success">
-    <h3>Add a List</h3>
+<div class="alert alert-warning">
+    <h3>Add an item to a List</h3>
     <p>Enter an item to add to the list, then click the Plus button to add the item to the list.</p><br>
     <form class="form-inline">
-    <input type="text" ng-model="lc.itemName" class="form-control"/>
-    <button ng-click="lc.addItem()" class="btn btn-primary">+</button>
+        <input type="text" ng-model="lc.itemName" class="form-control"/>
+        <button ng-click="lc.addItem()" class="btn btn-primary">+</button>
     </form>
+    <br>
+    <h3>Shopping Lists</h3>
+    <table>
+        <tr ng-repeat="item in lc.listItems">
+            <td>{{ item.name }}</td>
+        </tr>
+    </table>
 </div>
