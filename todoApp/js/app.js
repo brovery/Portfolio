@@ -5,7 +5,7 @@
         "ui.router",
         "navController",
         "basicController",
-        "listController"
+        "listService"
     ])
 
     .config(["$stateProvider", "$urlRouterProvider",
@@ -17,11 +17,6 @@
                     url: "/home",
                     templateUrl: "templates/home.html",
                     controller: "basicController as bc"
-                })
-                .state("list", {
-                    url: "/list",
-                    templateUrl: "templates/list.html",
-                    controller: "listController as lc"
                 })
                 .state("about", {
                     url: "/about",

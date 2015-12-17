@@ -16,9 +16,8 @@
     <br>
     <form class="form-inline">
         <label>Lists</label>
-        <select class="form-control">
-            <option>All</option>
-            <option ng-repeat="shoppingLists in bc.shoppingLists" ng-bind="shoppingLists.name"></option>
+        <select class="form-control" ng-model="bc.currentList" ng-change="bc.changeList()">
+            <option ng-repeat="shoppingLists in bc.shoppingLists" ng-bind="shoppingLists" value="{{$index}}"></option>
         </select>
     </form>
     <br>
@@ -28,10 +27,19 @@
             <th>Quantity</th>
             <th>Purchased</th>
         </tr>
-        <tr ng-repeat="item in bc.listItems">
+        <tr ng-repeat="item in bc.listItems | filter:{list:bc.currentList}">
             <td>{{ item.name }}</td>
             <td>{{ item.qty }}</td>
             <td><input type="checkbox"></td>
+        </tr>
+    </table>
+    <br>
+    <h3>Filters:</h3>
+    <table class="table">
+        <tr>
+            <th>ALL</th>
+            <th>TO BUY</th>
+            <th>PURCHASED</th>
         </tr>
     </table>
 </div>

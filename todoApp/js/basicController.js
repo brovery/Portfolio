@@ -4,29 +4,47 @@
     angular.module('basicController', [])
         .controller('basicController', basicController);
 
-    basicController.$inject = [];
+    basicController.$inject = ['listService'];
 
-    function basicController() {
+    function basicController(listService) {
 
         // list everything
         var bc = this;
-        bc.shoppingLists = [];
-        bc.listItems = [];
+        bc.shoppingLists = listService.shoppingLists;
+        bc.listItems = listService.listItems;
+        bc.currentList = listService.curList;
         bc.addList = addList;
         bc.addItem = addItem;
+        bc.removeList = removeList;
+        bc.removeItem = removeItem;
+        bc.changeList = changeList;
 
         // define functions
         function addList() {
-            bc.shoppingLists.push({name: bc.listName});
+            listService.addList(bc.listName);
             bc.listName = '';
-            console.log(bc.shoppingLists);
         }
 
         function addItem() {
-            bc.listItems.push({name: bc.itemName, qty: bc.itemQty});
+            listService.addItem(bc.itemName, bc.itemQty, bc.listName);
             bc.itemName = '';
             bc.itemQty = '';
-            console.log(bc.listItems);
+
+
+            //bc.listItems.push({name: bc.itemName, qty: bc.itemQty, list: bc.itemList});
+            //console.log(bc.listItems);
+        }
+
+        function changeList() {
+            listService.changeList(bc.currentList);
+        }
+
+        function removeList() {
+            // TODO: Add functionality to remove a list.
+        }
+
+        function removeItem() {
+            // TODO: Add functionality to remove an item from a list.
         }
     }
 
