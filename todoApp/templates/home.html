@@ -14,23 +14,36 @@
         <button ng-click="bc.addItem()" class="btn btn-primary">+</button>
     </form>
     <br>
-    <form class="form-inline">
-        <label>Lists</label>
-        <select class="form-control" ng-model="bc.currentList" ng-change="bc.changeList()">
-            <option ng-repeat="shoppingLists in bc.shoppingLists" ng-bind="shoppingLists" value="{{$index}}"></option>
-        </select>
-    </form>
-    <br>
+
+    <table>
+        <tr>
+            <td ng-repeat="shoppingLists in bc.shoppingLists" class="ridiculous">
+                <span contenteditable="true" ng-click="bc.changeList($index)" class="btn btn-info clicky">{{shoppingLists}}</span>
+                <span class="btn btn-danger btn-xs">X</span>
+            </td>
+        </tr>
+    </table>
+
+    <!--<form class="form-inline">-->
+        <!--<label>Lists</label>-->
+        <!--<select class="form-control" ng-model="bc.currentList" ng-change="bc.changeList()">-->
+            <!--<option ng-repeat="shoppingLists in bc.shoppingLists" ng-bind="shoppingLists" value="{{$index}}"></option>-->
+        <!--</select>-->
+    <!--</form>-->
+    <!--<br>-->
+
     <table class="table">
         <tr>
             <th>Item</th>
             <th>Quantity</th>
             <th>Purchased</th>
+            <th>Edit</th>
         </tr>
         <tr ng-repeat="item in bc.listItems | filter:{list:bc.currentList}">
-            <td>{{ item.name }}</td>
-            <td>{{ item.qty }}</td>
+            <td contenteditable="true">{{ item.name }}</td>
+            <td contenteditable="true">{{ item.qty }}</td>
             <td><input type="checkbox"></td>
+            <td><button ng-click="bc.deleteItem($index)" class="btn btn-primary">Delete</button></td>
         </tr>
     </table>
     <br>

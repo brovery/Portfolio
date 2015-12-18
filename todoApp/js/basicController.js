@@ -1,4 +1,4 @@
-(function(){
+(function () {
     'use strict';
 
     angular.module('basicController', [])
@@ -15,9 +15,8 @@
         bc.currentList = listService.curList;
         bc.addList = addList;
         bc.addItem = addItem;
-        bc.removeList = removeList;
-        bc.removeItem = removeItem;
         bc.changeList = changeList;
+        bc.deleteItem = deleteItem;
 
         // define functions
         function addList() {
@@ -29,23 +28,18 @@
             listService.addItem(bc.itemName, bc.itemQty, bc.listName);
             bc.itemName = '';
             bc.itemQty = '';
-
-
-            //bc.listItems.push({name: bc.itemName, qty: bc.itemQty, list: bc.itemList});
-            //console.log(bc.listItems);
         }
 
-        function changeList() {
-            listService.changeList(bc.currentList);
+        function changeList(i) {
+            bc.currentList = i;
+            listService.changeList(i);
         }
 
-        function removeList() {
-            // TODO: Add functionality to remove a list.
+        function deleteItem(i) {
+            listService.deleteItem(i);
         }
 
-        function removeItem() {
-            // TODO: Add functionality to remove an item from a list.
-        }
+
     }
 
 }());
