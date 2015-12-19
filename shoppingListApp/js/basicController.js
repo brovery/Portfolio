@@ -17,6 +17,9 @@
         bc.addItem = addItem;
         bc.changeList = changeList;
         bc.deleteItem = deleteItem;
+        bc.deleteList = deleteList;
+        bc.clearDone = clearDone;
+        bc.toggleDone = toggleDone;
 
         // define functions
         function addList() {
@@ -37,6 +40,19 @@
 
         function deleteItem(i) {
             listService.deleteItem(i);
+        }
+
+        function deleteList(i) {
+            listService.deleteList(i);
+            bc.currentList = 0;
+        }
+
+        function clearDone() {
+            listService.clearDone();
+        }
+
+        function toggleDone(i) {
+            listService.toggleDone(i);
         }
 
 
