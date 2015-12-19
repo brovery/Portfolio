@@ -51,8 +51,8 @@
             listService.clearDone();
         }
 
-        function toggleDone(i) {
-            listService.toggleDone(i);
+        function toggleDone(n, l) {
+            listService.toggleDone(n, l);
         }
 
 

@@ -10,7 +10,7 @@
 
         // list everything
         var ls = this;
-        ls.shoppingLists = ['All'];
+        ls.shoppingLists = ['Main'];
         ls.listItems = [];
         ls.curList = 0;
         ls.listCount = 1;
@@ -24,9 +24,19 @@
 
         // define functions
         function addList(listname) {
-            ls.listCount++;
-            ls.curList = ls.listCount-1;
-            ls.shoppingLists.push(listname);
+            var dup = false;
+            for (var i = 0; i<ls.shoppingLists.length; i++) {
+                if (listname == ls.shoppingLists[i]) {
+                    dup = true;
+                }
+            }
+            if (dup == false) {
+                ls.listCount++;
+                ls.curList = ls.listCount-1;
+                ls.shoppingLists.push(listname);
+            } else {
+                alert("You cannot have duplicate list names. Please enter a valid list name.")
+            }
         }
 
         function addItem(name, qty, list) {
@@ -57,18 +67,25 @@
         function clearDone() {
             // Clears the completed items from the items list for the currently-selected list.
             for (var i = 0; i<ls.listItems.length; i++) {
-                if (ls.listItems[i].status == 1) {
+                if (ls.listItems[i].status == 1 && ls.listItems[i].list == ls.curList) {
                     ls.listItems.splice(i, 1);
                     i--;
                 }
             }
         }
 
-        function toggleDone(index) {
-            if (ls.listItems[index].status == 0) {
-                ls.listItems[index].status = 1;
-            } else {
-                ls.listItems[index].status = 0;
+        function toggleDone(name, list) {
+            // Toggle status of an item.
+            // Filter in html causes index to change, so this needs to loop through & find
+            // the item by name. In case of same-name items on different lists, need to check list too.
+            for (var i = 0; i<ls.listItems.length; i++) {
+                if (ls.listItems[i].name == name && ls.listItems[i].list == list) {
+                    if (ls.listItems[i].status == 0) {
+                        ls.listItems[i].status = 1;
+                    } else {
+                        ls.listItems[i].status = 0;
+                    }
+                }
             }
         }
     }

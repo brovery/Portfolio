@@ -40,10 +40,10 @@
             <th>Purchased</th>
             <th>Edit</th>
         </tr>
-        <tr ng-repeat="item in bc.listItems | filter:{list:bc.currentList}">
+        <tr class="itemList" ng-repeat="item in bc.listItems | filter:{list:bc.currentList}" ng-class="{'deleted': item.status}">
             <td contenteditable="true">{{ item.name }}</td>
             <td contenteditable="true">{{ item.qty }}</td>
-            <td><input type="checkbox" ng-click="bc.toggleDone($index)"></td>
+            <td><input type="checkbox" ng-checked="item.status" ng-click="bc.toggleDone(item.name, item.list)"></td>
             <td><button ng-click="bc.deleteItem($index)" class="btn btn-primary">Delete</button></td>
         </tr>
     </table>
