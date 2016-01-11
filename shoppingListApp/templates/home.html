@@ -32,9 +32,11 @@
             <th>Purchased</th>
             <th>Edit</th>
         </tr>
-        <tr class="itemList" ng-repeat="item in bc.listItems | filter:{list:bc.currentList}" ng-class="{'deleted': item.status}"
+        <tr class="itemList" ng-repeat="item in filteredItems = (bc.listItems | filter:{list:bc.currentList}) track by item.id" ng-class="{'deleted': item.status}"
             td-item>
         </tr>
+        <!--If no items in list, display this message-->
+        <tr td-nonefound ng-hide="filteredItems.length"></tr>
     </table>
     <br>
     <!--<h3>Filters:</h3>-->

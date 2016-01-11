@@ -14,6 +14,7 @@
         ls.listItems = [];
         ls.curList = 0;
         ls.listCount = 1;
+        ls.itemId = 1;
         ls.addList = addList;
         ls.addItem = addItem;
         ls.changeList = changeList;
@@ -40,7 +41,8 @@
         }
 
         function addItem(name, qty, list) {
-            ls.listItems.push({name: name, qty: qty, list: ls.curList, status: 0});
+            ls.listItems.push({name: name, qty: qty, list: ls.curList, status: 0, id: ls.itemId});
+            ls.itemId++;
             console.log(ls.listItems);
         }
 
@@ -48,8 +50,13 @@
             ls.curList = cur;
         }
 
-        function deleteItem(index) {
-            ls.listItems.splice(index, 1);
+        function deleteItem(id) {
+            for (var i = 0; i<ls.listItems.length; i++) {
+                if (ls.listItems[i].id === id) {
+                    ls.listItems.splice(i, 1);
+                    return;
+                }
+            }
         }
 
         function deleteList(index) {
