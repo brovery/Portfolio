@@ -19,19 +19,11 @@
     <table>
         <tr>
             <td ng-repeat="shoppingLists in bc.shoppingLists" class="ridiculous">
-                <span contenteditable="true" ng-click="bc.changeList($index)" class="btn btn-info clicky">{{shoppingLists}}</span>
+                <span ng-click="bc.changeList($index)" class="btn btn-info clicky">{{shoppingLists}}</span>
                 <span class="btn btn-danger btn-xs" ng-click="bc.deleteList($index)">X</span>
             </td>
         </tr>
     </table>
-
-    <!--<form class="form-inline">-->
-        <!--<label>Lists</label>-->
-        <!--<select class="form-control" ng-model="bc.currentList" ng-change="bc.changeList()">-->
-            <!--<option ng-repeat="shoppingLists in bc.shoppingLists" ng-bind="shoppingLists" value="{{$index}}"></option>-->
-        <!--</select>-->
-    <!--</form>-->
-    <!--<br>-->
 
     <table class="table">
         <tr>
@@ -40,11 +32,8 @@
             <th>Purchased</th>
             <th>Edit</th>
         </tr>
-        <tr class="itemList" ng-repeat="item in bc.listItems | filter:{list:bc.currentList}" ng-class="{'deleted': item.status}">
-            <td contenteditable="true">{{ item.name }}</td>
-            <td contenteditable="true">{{ item.qty }}</td>
-            <td><input type="checkbox" ng-checked="item.status" ng-click="bc.toggleDone(item.name, item.list)"></td>
-            <td><button ng-click="bc.deleteItem($index)" class="btn btn-primary">Delete</button></td>
+        <tr class="itemList" ng-repeat="item in bc.listItems | filter:{list:bc.currentList}" ng-class="{'deleted': item.status}"
+            td-item>
         </tr>
     </table>
     <br>

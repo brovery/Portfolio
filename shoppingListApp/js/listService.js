@@ -41,6 +41,7 @@
 
         function addItem(name, qty, list) {
             ls.listItems.push({name: name, qty: qty, list: ls.curList, status: 0});
+            console.log(ls.listItems);
         }
 
         function changeList(cur) {
