@@ -1,12 +1,12 @@
 (function(){
     'use strict';
 
-    angular.module('listService', [])
+    angular.module('listService', ['ngStorage'])
         .service('listService', listService);
 
-    listService.$inject = [];
+    listService.$inject = ['$localStorage'];
 
-    function listService() {
+    function listService($localStorage) {
 
         // list everything
         var ls = this;
@@ -38,16 +38,21 @@
             } else {
                 alert("You cannot have duplicate list names. Please enter a valid list name.")
             }
+            $localStorage.listCount = ls.listCount;
+            $localStorage.curList = ls.curList;
+            $localStorage.shoppingLists = ls.shoppingLists;
         }
 
         function addItem(name, qty, list) {
             ls.listItems.push({name: name, qty: qty, list: ls.curList, status: 0, id: ls.itemId});
             ls.itemId++;
-            console.log(ls.listItems);
+            $localStorage.listItems = ls.listItems;
+            $localStorage.itemId = ls.itemId;
         }
 
         function changeList(cur) {
             ls.curList = cur;
+            $localStorage.curList = ls.curList;
         }
 
         function deleteItem(id) {
@@ -57,6 +62,7 @@
                     return;
                 }
             }
+            $localStorage.listItems = ls.listItems;
         }
 
         function deleteList(index) {
@@ -70,6 +76,9 @@
                     ls.listItems[i].list = ls.listItems[i].list-1;
                 }
             }
+            $localStorage.shoppingLists = ls.shoppingLists;
+            $localStorage.curList = ls.curList;
+            $localStorage.listItems = ls.listItems;
         }
 
         function clearDone() {
@@ -80,6 +89,7 @@
                     i--;
                 }
             }
+            $localStorage.listItems = ls.listItems;
         }
 
         function toggleDone(name, list) {
@@ -95,7 +105,30 @@
                     }
                 }
             }
+            $localStorage.listItems = ls.listItems;
         }
+
+        (function() {
+            if ($localStorage.listCount) {
+                ls.listCount = $localStorage.listCount;
+            }
+
+            if ($localStorage.curList) {
+                ls.curList = $localStorage.curList;
+            }
+
+            if ($localStorage.shoppingLists) {
+                ls.shoppingLists = $localStorage.shoppingLists;
+            }
+
+            if ($localStorage.itemId) {
+                ls.itemId = $localStorage.itemId;
+            }
+
+            if ($localStorage.listItems) {
+                ls.listItems = $localStorage.listItems;
+            }
+        })();
     }
 
 }());

@@ -7,7 +7,8 @@
         "basicController",
         "listService",
         "homeDirectives",
-        "app.filters"
+        "app.filters",
+        "ngAnimate"
     ])
 
     .config(["$stateProvider", "$urlRouterProvider",
