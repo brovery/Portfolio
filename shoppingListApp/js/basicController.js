@@ -20,6 +20,8 @@
         bc.deleteList = deleteList;
         bc.clearDone = clearDone;
         bc.toggleDone = toggleDone;
+        bc.editItem = editItem;
+        bc.open = open;
 
         // define functions
         function addList() {
@@ -28,7 +30,7 @@
         }
 
         function addItem() {
-            listService.addItem(bc.itemName, bc.itemQty, bc.listName);
+            listService.addItem(bc.itemName, bc.itemQty);
             bc.itemName = '';
             bc.itemQty = '';
         }
@@ -54,6 +56,28 @@
         function toggleDone(n, l) {
             listService.toggleDone(n, l);
         }
+
+        function editItem(i) {
+
+
+
+            listService.editItem(i);
+        }
+
+        function open() {
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'myModalContent.html'
+
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.selected = selectedItem;
+            }, function() {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+        
 
 
     }

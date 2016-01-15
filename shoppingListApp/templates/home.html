@@ -39,6 +39,24 @@
         <tr td-nonefound ng-hide="filteredItems.length"></tr>
     </table>
     <br>
+
+    <button class="btn btn-warning" ng-click="bc.open()">Edit</button>
+
+    <script type="text/ng-template" id="myModalContent.html">
+
+                <div class="modal-header">
+                    <h3>Edit Items</h3>
+                </div>
+                <div class="modal-body">
+                    Edit fields go right here!
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" ng-click="bc.editItem()" data-dismiss="modal">Submit</button>
+                    <button class="btn btn-warning" data-dismiss="modal">Cancel</button>
+                </div>
+
+    </script>
+
     <!--<h3>Filters:</h3>-->
     <!--<table class="table">-->
         <!--<tr>-->

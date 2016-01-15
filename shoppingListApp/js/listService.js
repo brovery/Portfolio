@@ -22,6 +22,8 @@
         ls.deleteList = deleteList;
         ls.clearDone = clearDone;
         ls.toggleDone = toggleDone;
+        ls.store = store;
+        ls.editItem = editItem;
 
         // define functions
         function addList(listname) {
@@ -38,21 +40,18 @@
             } else {
                 alert("You cannot have duplicate list names. Please enter a valid list name.")
             }
-            $localStorage.listCount = ls.listCount;
-            $localStorage.curList = ls.curList;
-            $localStorage.shoppingLists = ls.shoppingLists;
+            ls.store();
         }
 
-        function addItem(name, qty, list) {
+        function addItem(name, qty) {
             ls.listItems.push({name: name, qty: qty, list: ls.curList, status: 0, id: ls.itemId});
             ls.itemId++;
-            $localStorage.listItems = ls.listItems;
-            $localStorage.itemId = ls.itemId;
+            ls.store();
         }
 
         function changeList(cur) {
             ls.curList = cur;
-            $localStorage.curList = ls.curList;
+            ls.store();
         }
 
         function deleteItem(id) {
@@ -62,7 +61,7 @@
                     return;
                 }
             }
-            $localStorage.listItems = ls.listItems;
+            ls.store();
         }
 
         function deleteList(index) {
@@ -76,9 +75,7 @@
                     ls.listItems[i].list = ls.listItems[i].list-1;
                 }
             }
-            $localStorage.shoppingLists = ls.shoppingLists;
-            $localStorage.curList = ls.curList;
-            $localStorage.listItems = ls.listItems;
+            ls.store();
         }
 
         function clearDone() {
@@ -89,13 +86,14 @@
                     i--;
                 }
             }
-            $localStorage.listItems = ls.listItems;
+            ls.store();
         }
 
         function toggleDone(name, list) {
             // Toggle status of an item.
             // Filter in html causes index to change, so this needs to loop through & find
             // the item by name. In case of same-name items on different lists, need to check list too.
+            // TODO: Refactor this to use itemId instead of name/list.
             for (var i = 0; i<ls.listItems.length; i++) {
                 if (ls.listItems[i].name == name && ls.listItems[i].list == list) {
                     if (ls.listItems[i].status == 0) {
@@ -105,7 +103,20 @@
                     }
                 }
             }
+            ls.store();
+        }
+
+        function editItem(id) {
+            console.log("editing item: " + id);
+        }
+
+        function store() {
+            $localStorage.listCount = ls.listCount;
+            $localStorage.curList = ls.curList;
+            $localStorage.shoppingLists = ls.shoppingLists;
+            $localStorage.itemId = ls.itemId;
             $localStorage.listItems = ls.listItems;
+
         }
 
         (function() {
