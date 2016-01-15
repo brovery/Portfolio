@@ -13,6 +13,7 @@
         bc.shoppingLists = listService.shoppingLists;
         bc.listItems = listService.listItems;
         bc.currentList = listService.curList;
+        bc.showModal = false;
         bc.addList = addList;
         bc.addItem = addItem;
         bc.changeList = changeList;
@@ -65,20 +66,13 @@
         }
 
         function open() {
-            var modalInstance = $uibModal.open({
-                animation: $scope.animationsEnabled,
-                templateUrl: 'myModalContent.html'
-
-            });
-
-            modalInstance.result.then(function (selectedItem) {
-                $scope.selected = selectedItem;
-            }, function() {
-                $log.info('Modal dismissed at: ' + new Date());
-            });
-        };
+            console.log("In the controller");
+            bc.showModal = !bc.showModal;
+        }
         
-
+    // TODO: Have cleared items stored to a History array of items.
+    //    TODO: Give ability to add historical items back to an existing list.
+    //    TODO: Add store to file functionality so multiple users can access the same list.
 
     }
 
