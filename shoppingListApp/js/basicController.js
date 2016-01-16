@@ -2,18 +2,21 @@
     'use strict';
 
     angular.module('basicController', [])
-        .controller('basicController', basicController);
+        .controller('basicController', basicController)
+        .controller('ModalInstanceCtrl', ModalInstanceCtrl);
 
-    basicController.$inject = ['listService'];
+    basicController.$inject = ['listService', '$uibModal'];
+    ModalInstanceCtrl.$inject = ['$uibModalInstance'];
 
-    function basicController(listService) {
+    function basicController(listService, $uibModal) {
 
         // list everything
         var bc = this;
+        bc.items = ['item1', 'item2', 'item2'];
         bc.shoppingLists = listService.shoppingLists;
         bc.listItems = listService.listItems;
         bc.currentList = listService.curList;
-        bc.showModal = false;
+        bc.curItem = listService.curItem;
         bc.addList = addList;
         bc.addItem = addItem;
         bc.changeList = changeList;
@@ -22,7 +25,8 @@
         bc.clearDone = clearDone;
         bc.toggleDone = toggleDone;
         bc.editItem = editItem;
-        bc.open = open;
+        bc.openModal = openModal;
+
 
         // define functions
         function addList() {
@@ -59,21 +63,47 @@
         }
 
         function editItem(i) {
-
-
-
             listService.editItem(i);
         }
 
-        function open() {
-            console.log("In the controller");
-            bc.showModal = !bc.showModal;
+        function openModal() {
+            $uibModal.open({
+                animation: true,
+                templateUrl: 'templates/modal.html',
+                controller: 'ModalInstanceCtrl as mic',
+                size: 'md',
+                resolve: {
+                    items: function() {
+                        return bc.items;
+                    }
+                }
+            });
+
+            //modalInstance.result.then(function(selectedItem) {
+            //    bc.selected = selectedItem;
+            //}, function() {
+            //    $log.info('Modal dismissed at: ' + new Date());
+            //});
         }
+
         
-    // TODO: Have cleared items stored to a History array of items.
+    //    TODO: Have cleared items stored to a History array of items.
     //    TODO: Give ability to add historical items back to an existing list.
     //    TODO: Add store to file functionality so multiple users can access the same list.
 
     }
 
+    function ModalInstanceCtrl($uibModalInstance) {
+        var mic = this;
+        mic.ok = ok;
+        mic.cancelModal = cancelModal;
+
+        function ok() {
+            $uibModalInstance.close();
+        }
+
+        function cancelModal() {
+            $uibModalInstance.close();
+        }
+    }
 }());

@@ -1,5 +1,5 @@
 <td ng-bind="item.name | properCase"></td>
 <td>{{ item.qty }}</td>
 <td><input type="checkbox" ng-checked="item.status" ng-click="bc.toggleDone(item.name, item.list)"></td>
-<td><button class="btn btn-warning" data-toggle="modal" data-target="myModal">Edit</button></td>
+<td><button class="btn btn-warning" ng-click="bc.openModal()">Edit</button></td>
 <td><button ng-click="bc.deleteItem(item.id)" class="btn btn-primary">Delete</button></td>

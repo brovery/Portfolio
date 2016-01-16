@@ -8,7 +8,8 @@
         "listService",
         "homeDirectives",
         "app.filters",
-        "ngAnimate"
+        "ngAnimate",
+        "ui.bootstrap"
     ])
 
     .config(["$stateProvider", "$urlRouterProvider",
