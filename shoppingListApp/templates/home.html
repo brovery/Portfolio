@@ -30,7 +30,7 @@
             <th>Item</th>
             <th>Quantity</th>
             <th>Purchased</th>
-            <th>Edit</th>
+            <th>Delete</th>
         </tr>
         <tr class="itemList" ng-repeat="item in filteredItems = (bc.listItems | filter:{list:bc.currentList}) track by item.id" ng-class="{'deleted': item.status}"
             td-item>
