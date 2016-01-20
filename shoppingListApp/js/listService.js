@@ -1,12 +1,24 @@
 (function(){
     'use strict';
 
-    angular.module('listService', ['ngStorage', '$firebaseArray'])
+    angular.module('listService', ['ngStorage'])
         .service('listService', listService);
 
-    listService.$inject = ['$localStorage'];
+    listService.$inject = ['$localStorage', '$firebaseArray', '$firebaseObject'];
 
-    function listService($localStorage, $firebaseArray) {
+    function listService($localStorage, $firebaseArray, $firebaseObject) {
+        var ref = new Firebase("https://blistering-heat-9918.firebaseio.com/shoppingList/shoppingLists");
+        var array = $firebaseArray(ref);
+
+
+
+
+        var obj = $firebaseObject(ref);
+        //console.log(ref);
+        console.log(Object.keys(array));
+        console.log(array.$)
+        //console.log(obj.shoppingLists);
+        //console.log(Object.keys(obj));
 
         // list everything
         var ls = this;
@@ -24,6 +36,8 @@
         ls.toggleDone = toggleDone;
         ls.store = store;
         ls.editItem = editItem;
+
+
 
         // define functions
         function addList(listname) {
