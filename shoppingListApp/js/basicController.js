@@ -2,13 +2,12 @@
     'use strict';
 
     angular.module('basicController', [])
-        .controller('basicController', basicController)
-        .controller('ModalInstanceCtrl', ModalInstanceCtrl);
+        .controller('basicController', basicController);
 
-    basicController.$inject = ['listService', '$uibModal'];
-    ModalInstanceCtrl.$inject = ['$uibModalInstance'];
 
-    function basicController(listService, $uibModal) {
+    basicController.$inject = ['listService'];
+
+    function basicController(listService) {
 
         // list everything
         var bc = this;
@@ -25,7 +24,6 @@
         bc.clearDone = clearDone;
         bc.toggleDone = toggleDone;
         bc.editItem = editItem;
-        bc.openModal = openModal;
 
 
         // define functions
@@ -66,44 +64,10 @@
             listService.editItem(i);
         }
 
-        function openModal() {
-            $uibModal.open({
-                animation: true,
-                templateUrl: 'templates/modal.html',
-                controller: 'ModalInstanceCtrl as mic',
-                size: 'md',
-                resolve: {
-                    items: function() {
-                        return bc.items;
-                    }
-                }
-            });
-
-            //modalInstance.result.then(function(selectedItem) {
-            //    bc.selected = selectedItem;
-            //}, function() {
-            //    $log.info('Modal dismissed at: ' + new Date());
-            //});
-        }
-
-        
     //    TODO: Have cleared items stored to a History array of items.
     //    TODO: Give ability to add historical items back to an existing list.
     //    TODO: Add store to file functionality so multiple users can access the same list.
 
     }
 
-    function ModalInstanceCtrl($uibModalInstance) {
-        var mic = this;
-        mic.ok = ok;
-        mic.cancelModal = cancelModal;
-
-        function ok() {
-            $uibModalInstance.close();
-        }
-
-        function cancelModal() {
-            $uibModalInstance.close();
-        }
-    }
 }());
