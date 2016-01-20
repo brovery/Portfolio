@@ -8,7 +8,8 @@
         "listService",
         "homeDirectives",
         "app.filters",
-        "ngAnimate"
+        "ngAnimate",
+        "firebase"
     ])
 
     .config(["$stateProvider", "$urlRouterProvider",

@@ -1,12 +1,12 @@
 (function(){
     'use strict';
 
-    angular.module('listService', ['ngStorage'])
+    angular.module('listService', ['ngStorage', '$firebaseArray'])
         .service('listService', listService);
 
     listService.$inject = ['$localStorage'];
 
-    function listService($localStorage) {
+    function listService($localStorage, $firebaseArray) {
 
         // list everything
         var ls = this;
