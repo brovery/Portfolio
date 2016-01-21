@@ -7,12 +7,14 @@
     listService.$inject = ['$localStorage', '$firebaseArray', '$firebaseObject'];
 
     function listService($localStorage, $firebaseArray, $firebaseObject) {
-        var ref = new Firebase("https://blistering-heat-9918.firebaseio.com/shoppingList");
+        var url = "https://blistering-heat-9918.firebaseio.com/shoppingList";
+        var listref = new Firebase(url + "/Lists");
+        var itemref = new Firebase(url + "/Items");
 
         // list everything
         var ls = this;
-        ls.shoppingLists = $firebaseArray(ref);
-        ls.listItems = [];
+        ls.shoppingLists = $firebaseArray(listref);
+        ls.listItems = $firebaseArray(itemref);
         ls.curList = 0;
         ls.listCount = 1;
         ls.itemId = 1;
@@ -47,9 +49,16 @@
         }
 
         function addItem(name, qty) {
-            ls.listItems.push({name: name, qty: qty, list: ls.curList, status: 0, id: ls.itemId});
+            if (qty == undefined) {
+                qty = 0;
+            }
+            console.log(name + ", qty: " + qty);
+
+            ls.listItems.$add({name: name, qty: qty, list: ls.curList, status: 0, id: ls.itemId});
             ls.itemId++;
-            ls.store();
+
+            console.log(ls.listItems);
+
         }
 
         function changeList(cur) {
