@@ -7,7 +7,7 @@
     listService.$inject = ['$localStorage', '$firebaseArray', '$firebaseObject'];
 
     function listService($localStorage, $firebaseArray, $firebaseObject) {
-        var url = "https://blistering-heat-9918.firebaseio.com/shoppingList";
+        var url = "https://brovery-shop-app.firebaseio.com";
         var listref = new Firebase(url + "/Lists");
         var itemref = new Firebase(url + "/Items");
 
