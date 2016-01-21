@@ -48,8 +48,8 @@
             listService.deleteItem(i);
         }
 
-        function deleteList(i) {
-            listService.deleteList(i);
+        function deleteList(i, l) {
+            listService.deleteList(i, l);
             bc.currentList = 0;
         }
 
@@ -57,8 +57,8 @@
             listService.clearDone();
         }
 
-        function toggleDone(n, l) {
-            listService.toggleDone(n, l);
+        function toggleDone(item) {
+            listService.toggleDone(item);
         }
 
         function editItem(i) {

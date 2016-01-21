@@ -20,7 +20,7 @@
         <tr>
             <td ng-repeat="shoppingLists in bc.shoppingLists" class="ridiculous">
                 <span ng-click="bc.changeList($index)" class="btn btn-info clicky" ng-bind="shoppingLists.listName"></span> <!--| properCase-->
-                <span class="btn btn-danger btn-xs" ng-click="bc.deleteList(shoppingLists)">X</span>
+                <span class="btn btn-danger btn-xs" ng-click="bc.deleteList($index)">X</span>
             </td>
         </tr>
     </table>
@@ -32,7 +32,7 @@
             <th>Purchased</th>
             <th>Delete</th>
         </tr>
-        <tr class="itemList" ng-repeat="item in filteredItems = (bc.listItems | filter:{list:bc.currentList}) track by item.id" ng-class="{'deleted': item.status}"
+        <tr class="itemList" ng-repeat="item in filteredItems = (bc.listItems | filter:{list:bc.currentList})" ng-class="{'deleted': item.status}"
             td-item>
         </tr>
         <!--If no items in list, display this message-->
