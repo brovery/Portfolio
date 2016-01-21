@@ -7,22 +7,11 @@
     listService.$inject = ['$localStorage', '$firebaseArray', '$firebaseObject'];
 
     function listService($localStorage, $firebaseArray, $firebaseObject) {
-        var ref = new Firebase("https://blistering-heat-9918.firebaseio.com/shoppingList/shoppingLists");
-        var array = $firebaseArray(ref);
-
-
-
-
-        var obj = $firebaseObject(ref);
-        //console.log(ref);
-        console.log(Object.keys(array));
-        console.log(array.$)
-        //console.log(obj.shoppingLists);
-        //console.log(Object.keys(obj));
+        var ref = new Firebase("https://blistering-heat-9918.firebaseio.com/shoppingList");
 
         // list everything
         var ls = this;
-        ls.shoppingLists = ['Main'];
+        ls.shoppingLists = $firebaseArray(ref);
         ls.listItems = [];
         ls.curList = 0;
         ls.listCount = 1;
@@ -38,23 +27,23 @@
         ls.editItem = editItem;
 
 
-
         // define functions
         function addList(listname) {
-            var dup = false;
-            for (var i = 0; i<ls.shoppingLists.length; i++) {
-                if (listname == ls.shoppingLists[i]) {
-                    dup = true;
-                }
-            }
-            if (dup == false) {
-                ls.listCount++;
-                ls.curList = ls.listCount-1;
-                ls.shoppingLists.push(listname);
-            } else {
-                alert("You cannot have duplicate list names. Please enter a valid list name.")
-            }
-            ls.store();
+            //var dup = false;
+            //for (var i = 0; i<ls.shoppingLists.length; i++) {
+            //    if (listname == ls.shoppingLists[i]) {
+            //        dup = true;
+            //    }
+            //}
+            //if (dup == false) {
+            //    ls.listCount++;
+            //    ls.curList = ls.listCount-1;
+            //    ls.shoppingLists.push(listname);
+            //} else {
+            //    alert("You cannot have duplicate list names. Please enter a valid list name.")
+            //}
+            //ls.store();
+            ls.shoppingLists.$add({'listName': listname});
         }
 
         function addItem(name, qty) {
@@ -79,17 +68,18 @@
         }
 
         function deleteList(index) {
-            ls.shoppingLists.splice(index, 1);
-            ls.curList = 0;
-            for (var i = 0; i<ls.listItems.length; i++) {
-                if (ls.listItems[i].list == index) {
-                    ls.listItems.splice(i, 1);
-                    i--;
-                } else if (ls.listItems[i].list > index) {
-                    ls.listItems[i].list = ls.listItems[i].list-1;
-                }
-            }
-            ls.store();
+            //ls.shoppingLists.splice(index, 1);
+            //ls.curList = 0;
+            //for (var i = 0; i<ls.listItems.length; i++) {
+            //    if (ls.listItems[i].list == index) {
+            //        ls.listItems.splice(i, 1);
+            //        i--;
+            //    } else if (ls.listItems[i].list > index) {
+            //        ls.listItems[i].list = ls.listItems[i].list-1;
+            //    }
+            //}
+            //ls.store();
+            ls.shoppingLists.$remove(index);
         }
 
         function clearDone() {
@@ -125,34 +115,34 @@
         }
 
         function store() {
-            $localStorage.listCount = ls.listCount;
-            $localStorage.curList = ls.curList;
-            $localStorage.shoppingLists = ls.shoppingLists;
-            $localStorage.itemId = ls.itemId;
-            $localStorage.listItems = ls.listItems;
+            //$localStorage.listCount = ls.listCount;
+            //$localStorage.curList = ls.curList;
+            //$localStorage.shoppingLists = ls.shoppingLists;
+            //$localStorage.itemId = ls.itemId;
+            //$localStorage.listItems = ls.listItems;
 
         }
 
         (function() {
-            if ($localStorage.listCount) {
-                ls.listCount = $localStorage.listCount;
-            }
-
-            if ($localStorage.curList) {
-                ls.curList = $localStorage.curList;
-            }
-
-            if ($localStorage.shoppingLists) {
-                ls.shoppingLists = $localStorage.shoppingLists;
-            }
-
-            if ($localStorage.itemId) {
-                ls.itemId = $localStorage.itemId;
-            }
-
-            if ($localStorage.listItems) {
-                ls.listItems = $localStorage.listItems;
-            }
+            //if ($localStorage.listCount) {
+            //    ls.listCount = $localStorage.listCount;
+            //}
+            //
+            //if ($localStorage.curList) {
+            //    ls.curList = $localStorage.curList;
+            //}
+            //
+            //if ($localStorage.shoppingLists) {
+            //    ls.shoppingLists = $localStorage.shoppingLists;
+            //}
+            //
+            //if ($localStorage.itemId) {
+            //    ls.itemId = $localStorage.itemId;
+            //}
+            //
+            //if ($localStorage.listItems) {
+            //    ls.listItems = $localStorage.listItems;
+            //}
         })();
     }
 

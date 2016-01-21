@@ -24,6 +24,7 @@
         bc.clearDone = clearDone;
         bc.toggleDone = toggleDone;
         bc.editItem = editItem;
+        bc.slists = listService.slists;
 
 
         // define functions
