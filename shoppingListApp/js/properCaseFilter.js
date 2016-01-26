@@ -7,7 +7,7 @@
 
     function properCase() {
         return function(input) {
-            //return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+            return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
         }
     }
 })();
