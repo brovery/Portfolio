@@ -30,6 +30,7 @@
             <th>Item</th>
             <th>Quantity</th>
             <th>Purchased</th>
+            <th>Edit</th>
             <th>Delete</th>
         </tr>
         <tr class="itemList" ng-repeat="item in filteredItems = (bc.listItems | filter:{list:bc.currentList})" ng-class="{'deleted': item.status}"
@@ -39,6 +40,8 @@
         <tr td-nonefound ng-hide="filteredItems.length"></tr>
     </table>
     <br>
+
+    <!--<button class="btn btn-info" ng-click="bc.editItem(id)">Open Dialog</button>-->
 
 
 

@@ -4,9 +4,9 @@
     angular.module('listService', ['ngStorage'])
         .service('listService', listService);
 
-    listService.$inject = ['$localStorage', '$firebaseArray', '$firebaseObject'];
+    listService.$inject = ['$localStorage', '$firebaseArray', 'ngDialog'];
 
-    function listService($localStorage, $firebaseArray, $firebaseObject) {
+    function listService($localStorage, $firebaseArray, ngDialog) {
         var url = "https://brovery-shop-app.firebaseio.com";
         var listref = new Firebase(url + "/Lists");
         var itemref = new Firebase(url + "/Items");
@@ -80,8 +80,13 @@
             }
         }
 
-        function editItem(id) {
-            console.log("editing item: " + id);
+        function editItem(item) {
+            var myItem = ls.listItems.$getRecord(item.$id);
+            ngDialog.open({template: 'templates/dialog.html'});
+            //ngDialog.open({plain: true, template: `<h3>Edit Item</h3>
+            //<span>Item: ${myItem.name}</span>
+            //<input type="text" ng-model="${myItem.name}">
+            //<input type="text" ng-model="myItem.qty">`});
         }
     }
 

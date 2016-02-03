@@ -9,7 +9,8 @@
         "homeDirectives",
         "app.filters",
         "ngAnimate",
-        "firebase"
+        "firebase",
+        "ngDialog"
     ])
 
     .config(["$stateProvider", "$urlRouterProvider",
